@@ -21,38 +21,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "quiz")
-public class Quiz {
+@Table(name = "take")
+public class Take {
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
     @JoinColumn(
-        name = "hostId",
+        name = "userId",
         nullable = false
     )
-    private User host;
+    private User user;
+    @ManyToOne
+    @JoinColumn(
+        name = "quizId",
+        nullable = false
+    )
+    private Quiz quiz;
     @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private String slug;
+    private Float score;
     @Builder.Default
-    private Boolean published = true;
+    private Boolean pushlished = true;
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
-    @Builder.Default
-    private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
-    @Builder.Default
-    private Timestamp publishedAt = new Timestamp(System.currentTimeMillis());
     @Column(nullable = false)
-    private Timestamp startAt;
+    private Timestamp startedAt;
     @Column(nullable = false)
-    private Timestamp endAt;
-    private String content;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Question> questions;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Answer> answers;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Take> takes;
+    private Timestamp finishedAt;
+    @OneToMany(mappedBy = "take")
+    private Set<TakeAnswer> takeAnswers;
 }

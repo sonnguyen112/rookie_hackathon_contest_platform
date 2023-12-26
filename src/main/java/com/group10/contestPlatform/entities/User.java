@@ -44,4 +44,6 @@ public class User {
     private Set<Role> roles;
     @OneToMany(mappedBy = "host")
     private Set<Quiz> createdQuizzes;
+    @OneToMany(mappedBy = "user")
+    private Set<Take> takes;
 }

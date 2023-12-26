@@ -1,15 +1,12 @@
 package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,38 +18,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "quiz")
-public class Quiz {
+@Table(name = "take_answer")
+public class TakeAnswer {
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
     @JoinColumn(
-        name = "hostId",
+        name = "takeId",
         nullable = false
     )
-    private User host;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private String slug;
+    private Take take;
+    @ManyToOne
+    @JoinColumn(
+        name = "questionId",
+        nullable = false
+    )
+    private Question question;
+    @ManyToOne
+    @JoinColumn(
+        name = "answerId",
+        nullable = false
+    )
+    private Answer answer;
     @Builder.Default
-    private Boolean published = true;
+    private Boolean active = true;
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
     @Builder.Default
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
-    @Builder.Default
-    private Timestamp publishedAt = new Timestamp(System.currentTimeMillis());
-    @Column(nullable = false)
-    private Timestamp startAt;
-    @Column(nullable = false)
-    private Timestamp endAt;
     private String content;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Question> questions;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Answer> answers;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Take> takes;
 }
