@@ -27,16 +27,10 @@ public class Take {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(
-        name = "userId",
-        nullable = false
-    )
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
     @ManyToOne
-    @JoinColumn(
-        name = "quizId",
-        nullable = false
-    )
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     @Column(nullable = false)
     private Float score;

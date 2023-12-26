@@ -27,10 +27,7 @@ public class Quiz {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(
-        name = "hostId",
-        nullable = false
-    )
+    @JoinColumn(name = "hostId", nullable = false)
     private User host;
     @Column(nullable = false)
     private String title;

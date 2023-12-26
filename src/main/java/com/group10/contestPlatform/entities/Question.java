@@ -39,10 +39,7 @@ public class Question {
     @Column(nullable = false)
     private String content;
     @ManyToOne
-    @JoinColumn(
-        name = "quizId",
-        nullable = false
-    )
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     @OneToMany(mappedBy = "question")
     private Set<Answer> answers;

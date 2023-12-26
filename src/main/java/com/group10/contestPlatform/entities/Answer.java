@@ -27,16 +27,10 @@ public class Answer {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(
-        name = "quizId",
-        nullable = false
-    )
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     @ManyToOne
-    @JoinColumn(
-        name = "questionId",
-        nullable = false
-    )
+    @JoinColumn(name = "questionId", nullable = false)
     private Question question;
     @Builder.Default
     private Boolean active = true;
@@ -50,4 +44,4 @@ public class Answer {
     private String content;
     @OneToMany(mappedBy = "answer")
     private Set<TakeAnswer> takeAnswers;
-}   
+}
