@@ -26,8 +26,8 @@ public class Question {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false)
-    private String type;
+    // @Column(nullable = false)
+    // private String type;
     @Builder.Default
     private Boolean active = true;
     @Column(nullable = false)
@@ -45,4 +45,5 @@ public class Question {
     private Set<Answer> answers;
     @OneToMany(mappedBy = "question")
     private Set<TakeAnswer> takeAnswers;
+    private String imgURI;
 }

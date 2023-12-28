@@ -49,7 +49,8 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz")
     private Set<Question> questions;
     @OneToMany(mappedBy = "quiz")
-    private Set<Answer> answers;
-    @OneToMany(mappedBy = "quiz")
+    // private Set<Answer> answers;
+    // @OneToMany(mappedBy = "quiz")
     private Set<Take> takes;
+    private String imgURI;
 }

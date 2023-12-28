@@ -26,9 +26,9 @@ public class Answer {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "quizId", nullable = false)
-    private Quiz quiz;
+    // @ManyToOne
+    // @JoinColumn(name = "quizId", nullable = false)
+    // private Quiz quiz;
     @ManyToOne
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
