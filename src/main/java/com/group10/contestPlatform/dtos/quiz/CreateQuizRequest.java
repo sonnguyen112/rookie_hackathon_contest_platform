@@ -16,7 +16,7 @@ public class CreateQuizRequest {
     private String title;
     private String description;
     private String imageQuizUrl;
-    private Timestamp startAt;
-    private Timestamp endAt;
+    private String startAt;
+    private String endAt;
     private List<CreateQuestionRequest> questions;
 }

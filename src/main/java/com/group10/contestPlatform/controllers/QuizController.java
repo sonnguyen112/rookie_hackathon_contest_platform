@@ -2,6 +2,7 @@ package com.group10.contestPlatform.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,8 @@ public class QuizController {
     private final QuizService quizService;
 
     @PostMapping("/create_quiz")
-    public ResponseEntity<CreateQuizResponse> createQuiz(CreateQuizRequest createQuizRequest) {
-        return null;
+    public ResponseEntity<CreateQuizResponse> createQuiz(@RequestBody CreateQuizRequest createQuizRequest) {
+        quizService.createQuiz(createQuizRequest);
+        return ResponseEntity.status(201).body(CreateQuizResponse.builder().message("Quiz created successfully").build());
     }
 }
