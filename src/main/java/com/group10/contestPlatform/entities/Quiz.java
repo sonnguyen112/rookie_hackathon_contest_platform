@@ -27,10 +27,7 @@ public class Quiz {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(
-        name = "hostId",
-        nullable = false
-    )
+    @JoinColumn(name = "hostId", nullable = false)
     private User host;
     @Column(nullable = false)
     private String title;
@@ -51,8 +48,9 @@ public class Quiz {
     private String content;
     @OneToMany(mappedBy = "quiz")
     private Set<Question> questions;
-    @OneToMany(mappedBy = "quiz")
-    private Set<Answer> answers;
+    // @OneToMany(mappedBy = "quiz")
+    // private Set<Answer> answers;
     @OneToMany(mappedBy = "quiz")
     private Set<Take> takes;
+    private String imgURI;
 }

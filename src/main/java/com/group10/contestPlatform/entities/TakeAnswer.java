@@ -24,22 +24,13 @@ public class TakeAnswer {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(
-        name = "takeId",
-        nullable = false
-    )
+    @JoinColumn(name = "takeId", nullable = false)
     private Take take;
     @ManyToOne
-    @JoinColumn(
-        name = "questionId",
-        nullable = false
-    )
+    @JoinColumn(name = "questionId", nullable = false)
     private Question question;
     @ManyToOne
-    @JoinColumn(
-        name = "answerId",
-        nullable = false
-    )
+    @JoinColumn(name = "answerId", nullable = false)
     private Answer answer;
     @Builder.Default
     private Boolean active = true;

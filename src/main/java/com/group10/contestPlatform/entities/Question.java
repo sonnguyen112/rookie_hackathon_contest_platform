@@ -26,8 +26,8 @@ public class Question {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false)
-    private String type;
+    // @Column(nullable = false)
+    // private String type;
     @Builder.Default
     private Boolean active = true;
     @Column(nullable = false)
@@ -39,13 +39,11 @@ public class Question {
     @Column(nullable = false)
     private String content;
     @ManyToOne
-    @JoinColumn(
-        name = "quizId",
-        nullable = false
-    )
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     @OneToMany(mappedBy = "question")
     private Set<Answer> answers;
     @OneToMany(mappedBy = "question")
     private Set<TakeAnswer> takeAnswers;
+    private String imgURI;
 }
