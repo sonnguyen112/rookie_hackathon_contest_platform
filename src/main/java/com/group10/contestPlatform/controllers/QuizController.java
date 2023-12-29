@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group10.contestPlatform.dtos.CreateQuizRequest;
-import com.group10.contestPlatform.dtos.CreateQuizResponse;
+import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
+import com.group10.contestPlatform.dtos.quiz.CreateQuizResponse;
 import com.group10.contestPlatform.services.QuizService;
 
 import lombok.RequiredArgsConstructor;
