@@ -6,6 +6,7 @@ import CreateQuiz from "./pages/CreateQuiz";
 import Library from "./pages/Library";
 import NavPages from "./pages/NavPages";
 import "./App.css";
+import DetailQuiz from "./pages/DetailQuiz";
 function App() {
   const emptyProfile = {
     username: "",
@@ -53,6 +54,7 @@ function App() {
         />
         <Route path="test_create_quiz" element={<CreateQuiz profile={profile} token={token} />} />
         <Route path="test_get_quiz" element = {<Library profile={profile} token={token} />}/>
+        <Route path="test_play_quiz" element={<DetailQuiz  />} />
       </Routes>
     </BrowserRouter>
   );
