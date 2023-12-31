@@ -22,17 +22,17 @@ const Library = (props) => {
 
       let data = await response.json(); // parses JSON response into native JavaScript objects
       console.log(data);
-      setQuizs(data["quiz_list"]);
+      setQuizs(data);
       setLoading(false);
     }
-    GetData("http://localhost:8000/quiz/api/get_all_quiz");
+    GetData("http://localhost:8080/api/v1/quiz/get_all_quiz");
   }, [loading]);
 
   const handleEditQuiz = (index) => {
     setLoading(true);
     async function fetchQuiz() {
       const response = await fetch(
-        "http://localhost:8000/quiz/api/get_one_quiz/" + quizs[index]["slug"],
+        "http://localhost:8080/api/v1/quiz/get_one_quiz/" + quizs[index]["slug"],
         {
           mode: "cors",
           method: "GET",

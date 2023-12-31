@@ -1,5 +1,6 @@
 package com.group10.contestPlatform.entities;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -26,5 +27,5 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String name;
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private List<User> users;
 }

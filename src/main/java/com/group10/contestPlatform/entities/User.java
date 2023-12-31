@@ -2,12 +2,14 @@ package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,13 +46,13 @@ public class User implements UserDetails {
     private String email;
     private Timestamp registerAt;
     private Timestamp lastLogin;
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List<Role> roles;
     @OneToMany(mappedBy = "host")
-    private Set<Quiz> createdQuizzes;
+    private List<Quiz> createdQuizzes;
     @OneToMany(mappedBy = "user")
-    private Set<Take> takes;
+    private List<Take> takes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

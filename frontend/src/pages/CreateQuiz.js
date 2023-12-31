@@ -22,6 +22,8 @@ const CreateQuiz = (props) => {
   const [title, setTitle] = useState("");
   const [imgQuiz, setImgQuiz] = useState("");
   const [slug, setSlug] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   let navigate = useNavigate();
   const location = useLocation();
 
@@ -45,13 +47,16 @@ const CreateQuiz = (props) => {
     quizAns: "",
     quizName: "",
     quizCorrect: "",
+    startTime: "",
+    endTime: "",
   });
   useEffect(() => {
     if (location.state) {
       setEdit(location.state.edit);
 
-      const list_ques = location.state.quiz.list_question;
-      const list_opts = location.state.quiz.list_option;
+      const list_ques = location.state.quiz.questions;
+      console.log("list_ques", location.state);
+      const list_opts = location.state.quiz.answers;
       const ques = [];
       if (list_ques.length !== 0) {
         list_ques.map((q) => {
@@ -78,6 +83,8 @@ const CreateQuiz = (props) => {
       setSlug(location.state.slug);
       setImgQuiz(location.state.quiz.imageQuizUrl);
       setTitle(location.state.quiz.title);
+      setStartTime(location.state.quiz.startAt);
+      setEndTime(location.state.quiz.endAt);
     }
   }, [location]);
 
@@ -89,6 +96,18 @@ const CreateQuiz = (props) => {
     setOpen(false);
   };
 
+  const handleStartTime = (value) => {
+    let startTime = new Date(value.$y, value.$M, value.$D, value.$H, value.$m);
+    console.log(startTime.getTime());
+    setStartTime(startTime.getTime());
+  }
+
+  const handleEndTime = (value) => {
+    let endTime = new Date(value.$y, value.$M, value.$D, value.$H, value.$m);
+    console.log(endTime.getTime());
+    setEndTime(endTime.getTime());
+  }
+
   const handleSave = async () => {
     setLoading(true);
 
@@ -96,6 +115,8 @@ const CreateQuiz = (props) => {
       title: title,
       description: "No description",
       questions: JSON.parse(JSON.stringify(question)),
+      startAt: String(startTime),
+      endAt: String(endTime),
     };
     const getImageToBase64 = async (url) => {
       const data = await fetch(url);
@@ -110,17 +131,25 @@ const CreateQuiz = (props) => {
       });
     };
     const copyImgQuiz = await getImageToBase64(imgQuiz);
-    if (copyImgQuiz.trim() !== "") {
+    if (copyImgQuiz.trim() !== "" && copyImgQuiz.startsWith("data:image")) {
       quizCreate.imageQuizUrl = copyImgQuiz.substring(
         copyImgQuiz.search("base64,") + 7
       );
     }
     var checkError = false;
-    var message = { title: "", quizAns: "", quizName: "", quizCorrect: "" };
+    var message = { title: "", quizAns: "", quizName: "", quizCorrect: "", startTime: "", endTime: "" };
 
     if (quizCreate.title.trim() === "") {
       checkError = true;
       message.title = "Please set the title of quiz.";
+    }
+    if (quizCreate.startTime === "") {
+      checkError = true;
+      message.startTime = "Please set the start time of quiz.";
+    }
+    if (quizCreate.endTime === "") {
+      checkError = true;
+      message.endTime = "Please set the end time of quiz.";
     }
     for (let i = 0; i < quizCreate.questions.length; i++) {
       const copyImgQuestion = await getImageToBase64(
@@ -170,9 +199,9 @@ const CreateQuiz = (props) => {
   async function fetchCreateQuiz(edit, quizCreate) {
     const link =
       edit === 1
-        ? `http://localhost:8000/quiz/api/update_quiz/${slug}`
-        : "http://localhost:8000/quiz/api/create_quiz";
-    const methodS = edit === 1 ? "PATCH" : "POST";
+        ? `http://localhost:8080/api/v1/quiz/update_quiz/${slug}`
+        : "http://localhost:8080/api/v1/quiz/create_quiz";
+    const methodS = edit === 1 ? "PUT" : "POST";
     const response = await fetch(link, {
       mode: "cors",
       method: methodS,
@@ -196,6 +225,10 @@ const CreateQuiz = (props) => {
         handleTitle={handleTitle}
         setImgQuiz={setImgQuiz}
         handleSave={handleSave}
+        handleStartTime={handleStartTime}
+        handleEndTime={handleEndTime}
+        startTime={startTime}
+        endTime={endTime}
       />
       <Dialog
         open={open}
@@ -227,6 +260,18 @@ const CreateQuiz = (props) => {
             <DialogContentText id="alert-dialog-description">
               Please choose at least one correct answer of question{" "}
               {messageError.quizCorrect}.
+            </DialogContentText>
+          )}
+          {messageError.startTime.trim() !== "" && (
+            <DialogContentText id="alert-dialog-description">
+              Please set the start time of quiz.
+              {messageError.startTime}.
+            </DialogContentText>
+          )}
+          {messageError.endTime.trim() !== "" && (
+            <DialogContentText id="alert-dialog-description">
+              Please set the end time of quiz.
+              {messageError.endTime}.
             </DialogContentText>
           )}
         </DialogContent>

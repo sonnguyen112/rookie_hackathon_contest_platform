@@ -1,6 +1,7 @@
 package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -26,10 +27,10 @@ public class Answer {
     @Id
     @GeneratedValue
     private Long id;
-    // @ManyToOne
-    // @JoinColumn(name = "quizId", nullable = false)
-    // private Quiz quiz;
     @ManyToOne
+    @JoinColumn(name = "quizId", nullable = false)
+    private Quiz quiz;
+    @ManyToOne()
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
     @Builder.Default
@@ -43,5 +44,5 @@ public class Answer {
     @Column(nullable = false)
     private String content;
     @OneToMany(mappedBy = "answer")
-    private Set<TakeAnswer> takeAnswers;
+    private List<TakeAnswer> takeAnswers;
 }
