@@ -3,7 +3,9 @@ package com.group10.contestPlatform.entities;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
+public class User implements UserDetails{
     @Id
     @GeneratedValue
     private Long id;
@@ -51,30 +53,44 @@ public class User implements UserDetails {
     private Set<Quiz> createdQuizzes;
     @OneToMany(mappedBy = "user")
     private Set<Take> takes;
+    @Column(name = "google_account_id")
+    @ColumnDefault("0")
+    private int googleAccountId;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+    public User(String username, String firstName, String email, String lastName, String encode) {
+        this.username = username;
+        this.firstName = firstName;
+        this.email = email;
+        this.lastName = lastName;
+        this.password = encode;
     }
 
+
+
     @Override
-    public String getPassword() {
-        return password;
+    public String getUsername() {
+        return username;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
