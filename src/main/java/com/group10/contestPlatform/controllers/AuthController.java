@@ -51,6 +51,8 @@ public class AuthController {
 	@Autowired
 	IUserService userService;
 
+
+
 	@Autowired
 	IRoleService roleService;
 
@@ -88,24 +90,14 @@ public class AuthController {
 		User user = new User(signUpForm.getUsername(), signUpForm.getFirstName(), signUpForm.getEmail(),
 				signUpForm.getLastName(), passwordEncoder.encode(signUpForm.getPassword()));
 
-		Set<String> strRoles = signUpForm.getRoles();
-		Set<Role> rolesEntity = new HashSet<>();
+		Role role =roleService.findById(signUpForm.getRoleId())
+				.orElseThrow(() -> new DataNotFoundException(
+						localizationUtils.getLocalizedMessage(MessageKeys.ROLE_DOES_NOT_EXISTS)));
+		if(role.getName().toUpperCase().equals(Role.ADMIN)) {
+			throw new Exception("Không được phép đăng ký tài khoản Admin");
+		}
 
-		strRoles.forEach(role -> {
-			switch (role) {
-				case "admin":
-					Role adminRole = roleService.findByName(RoleEnum.ADMIN)
-							.orElseThrow(() -> new RuntimeException("Role not found"));
-					rolesEntity.add(adminRole);
-					break;
-				default:
-					Role userRole = roleService.findByName(RoleEnum.USER)
-							.orElseThrow(() -> new RuntimeException("Role not found"));
-					rolesEntity.add(userRole);
-			}
-		});
-
-		user.setRole((Role) rolesEntity);
+		user.setRole(role);
 
 
 		userService.save(user);

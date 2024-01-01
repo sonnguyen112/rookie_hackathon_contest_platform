@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface IRoleService {
 	  Optional<Role> findByName(RoleEnum name);
+
+    Optional<Role> findById(Long roleId);
 }
