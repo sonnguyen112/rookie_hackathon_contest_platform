@@ -59,7 +59,7 @@ public class AuthController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
-	
+
 	@GetMapping(value = "/logout")
 	public ResponseEntity<?> logoutPage(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +69,7 @@ public class AuthController {
 
 		return new ResponseEntity<>(new ResponMessage("yes"), HttpStatus.OK);
 	}
-	
+
 
 	@Autowired
 	JWTUtils jwtUtils;
@@ -93,15 +93,15 @@ public class AuthController {
 
 		strRoles.forEach(role -> {
 			switch (role) {
-			case "admin":
-				Role adminRole = roleService.findByName(RoleEnum.ADMIN)
-						.orElseThrow(() -> new RuntimeException("Role not found"));
-				rolesEntity.add(adminRole);
-				break;
-			default:
-				Role userRole = roleService.findByName(RoleEnum.USER)
-						.orElseThrow(() -> new RuntimeException("Role not found"));
-				rolesEntity.add(userRole);
+				case "admin":
+					Role adminRole = roleService.findByName(RoleEnum.ADMIN)
+							.orElseThrow(() -> new RuntimeException("Role not found"));
+					rolesEntity.add(adminRole);
+					break;
+				default:
+					Role userRole = roleService.findByName(RoleEnum.USER)
+							.orElseThrow(() -> new RuntimeException("Role not found"));
+					rolesEntity.add(userRole);
 			}
 		});
 
@@ -112,7 +112,7 @@ public class AuthController {
 
 		return new ResponseEntity<>(new ResponMessage("yes"), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "api/users/logoutDummy")
 	@PreAuthorize("permitAll()")
 	@ResponseStatus(HttpStatus.OK)

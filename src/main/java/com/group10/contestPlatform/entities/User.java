@@ -1,24 +1,18 @@
 package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,9 +40,14 @@ public class User implements UserDetails{
     private String email;
     private Timestamp registerAt;
     private Timestamp lastLogin;
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+
+
     @OneToMany(mappedBy = "host")
     private Set<Quiz> createdQuizzes;
     @OneToMany(mappedBy = "user")
@@ -73,8 +72,11 @@ public class User implements UserDetails{
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_"+getRole().getName().toUpperCase()));
+
+
+        return authorityList;
 
     }
 
