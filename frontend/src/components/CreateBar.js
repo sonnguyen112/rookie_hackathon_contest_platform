@@ -13,6 +13,11 @@ import AdbIcon from "@mui/icons-material/Adb";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from "dayjs";
 const ToolBar = (props) => {
   const ref = useRef(null);
   useEffect(() => {
@@ -98,6 +103,31 @@ const ToolBar = (props) => {
             <input type="file" accept="image/*" name="myImage" hidden />
             <ColorLensIcon />
           </IconButton>
+          <Box style={{
+            "marginRight": "10px",
+          }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DateTimePicker']}>
+                <DateTimePicker 
+                label="Select start time" 
+                value={props.startTime ? dayjs.unix(props.startTime / 1000) : null}
+                onChange={(e) => props.handleStartTime(e)}/>
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+
+
+          <Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DateTimePicker']}>
+                <DateTimePicker 
+                label="Select end time"
+                value={props.endTime ? dayjs.unix(props.endTime / 1000) : null}
+                onChange={(e) => props.handleEndTime(e)} />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+
         </Box>
         <Box sx={{ flexGrow: 0 }}>
           <Button

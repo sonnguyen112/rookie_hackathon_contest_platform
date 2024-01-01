@@ -7,6 +7,13 @@ import Library from "./pages/Library";
 import NavPages from "./pages/NavPages";
 import "./App.css";
 import DetailQuiz from "./pages/DetailQuiz";
+import { Provider, useSelector } from "react-redux";
+import { persistor, store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { ToastContainer } from "react-toastify";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const emptyProfile = {
     username: "",
@@ -16,47 +23,45 @@ function App() {
     avatar: "",
   };
 
-  const localToken = window.localStorage.getItem("token");
-  const sessionToken = window.sessionStorage.getItem("token");
-  const remember = window.localStorage.getItem("remember");
-  const localProfile =
-    remember === "1"
-      ? JSON.parse(window.localStorage.getItem("profile"))
-      : null;
-  const sessionProfile =
-    remember !== "1"
-      ? JSON.parse(window.sessionStorage.getItem("profile"))
-      : null;
-  const [token, setToken] = React.useState(
-    localToken ? localToken : sessionToken ? sessionToken : ""
-  );
-  const [profile, setProfile] = React.useState(
-    localProfile ? localProfile : sessionProfile ? sessionProfile : emptyProfile
-  );
+
+  
 
   return (
+    <Provider store={store}>
+       <PersistGate loading={null} persistor={persistor}>
     <BrowserRouter>
       <Routes>
         <Route
           path="*"
           element={
             <NavPages
-              token={token}
-              setToken={setToken}
-              profile={profile}
-              setProfile={setProfile}
             />
           }
         />
         <Route
           path="create-quiz"
-          element={<CreateQuiz profile={profile} token={token} />}
+          element={<CreateQuiz />}
         />
-        <Route path="test_create_quiz" element={<CreateQuiz profile={profile} token={token} />} />
-        <Route path="test_get_quiz" element = {<Library profile={profile} token={token} />}/>
+        <Route path="test_create_quiz" element={<CreateQuiz  />} />
+        <Route path="test_get_quiz" element = {<Library  />}/>
         <Route path="test_play_quiz" element={<DetailQuiz  />} />
       </Routes>
-    </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
+      </BrowserRouter>
+    </PersistGate>
+    </Provider>
   );
 }
 

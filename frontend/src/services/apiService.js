@@ -27,6 +27,12 @@ const getDataQuiz = (id) => {
 const getAllQuizForAdmin = () => {
   return axios.get(`api/v1/quiz/list-quiz`);
 };
+const getAllQuiz = () => {
+  return axios.get(`api/v1/quiz/get_all_quiz`);
+};
+const getOneQuiz = (id) => {
+  return axios.get(`api/v1/quiz/get_one_quiz/${id}` );
+};
 
 const deleteQuizForAdmin = (data) => {
   return axios.delete(`api/v1/quiz`, { data: data });
@@ -62,9 +68,13 @@ const postRegister = (fullname, username, email, avatar, password, roles) => {
     roles,
   });
 };
-const postCreateNewQuiz = (namequiz, imagequiz, description) => {
-
-  return axios.post(`api/v1/quiz`, { namequiz, imagequiz, description });
+const postCreateOrUpdateQuiz = (methodS,link,quizCreate) => {
+  if(methodS == "POST"){
+    return axios.post(link,quizCreate);
+  }else{
+    return axios.put(link,quizCreate);
+  }
+ 
 };
 
 const putUpdateQuizForAdmin = (id, namequiz, imagequiz, description) => {
@@ -134,11 +144,13 @@ export {
   getQuizByUser,
   getDataQuiz,
   postSubmitQuiz,
-  postCreateNewQuiz,
+  postCreateOrUpdateQuiz,
   putUpdateQuiz,
   getAllQuizForAdmin,
+  getAllQuiz,
   putUpdateQuizForAdmin,
   deleteQuizForAdmin,
+  getOneQuiz,
   postCreateNewAnswerForQuestion,
   postCreateNewQuestionForQuiz,
   setCorrectAnswer,

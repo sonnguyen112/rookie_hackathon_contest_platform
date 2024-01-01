@@ -30,8 +30,8 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
 
         <div className="blask-footer">
           <div className="blask-author">
-            <img src={avatar} alt="" className="blask-avatar" />
-            {username || "You"}
+            {/* <img src={avatar} alt="" className="blask-avatar" />
+            {username || "You"} */}
           </div>
           <div className="blask-edit-info">
             <div>

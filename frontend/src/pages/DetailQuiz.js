@@ -13,7 +13,7 @@ import RightCotent from "./RighContent";
 const DetailQuiz = () => {
   const params = useParams();
   const location = useLocation();
-  const quizId = 1;
+  const quizId = params.id;;
   const [dataQuiz, setDataQuiz] = useState([]);
   const [index, setIndex] = useState(0)
   const [isShowModalResult, setIsShowModalResult] = useState(false)
@@ -34,6 +34,7 @@ const DetailQuiz = () => {
       .groupBy("id")
       .map((value, key) => {
 
+        
         let answers = [];
         let questionDescription, image = null;
         value.forEach((item, index) => {

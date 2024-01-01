@@ -1,6 +1,7 @@
 package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -38,12 +39,12 @@ public class Question {
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
     @Column(nullable = false)
     private String content;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     @OneToMany(mappedBy = "question")
-    private Set<Answer> answers;
+    private List<Answer> answers;
     @OneToMany(mappedBy = "question")
-    private Set<TakeAnswer> takeAnswers;
+    private List<TakeAnswer> takeAnswers;
     private String imgURI;
 }

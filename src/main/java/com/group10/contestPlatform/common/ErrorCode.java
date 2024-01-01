@@ -15,7 +15,7 @@ public class ErrorCode {
         dictError.put(0, "Request not validated");
         dictError.put(1, "Sign up failed");
         dictError.put(2, "Login failed");
-        dictError.put(3, "File not found");
+        dictError.put(3, "Quiz not found");
         dictError.put(4, "Not found register");
         dictError.put(5, "Error when saving file");
         dictError.put(6, "Upload file failed when sending");

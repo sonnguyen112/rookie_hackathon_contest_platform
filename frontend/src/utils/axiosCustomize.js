@@ -1,18 +1,18 @@
 import axios from "axios";
-
+import { store } from "../redux/store";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8081/",
+  baseURL: "http://localhost:8080/",
 });
 
 instance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
 
-    
+    const token = store?.getState()?.user?.account?.access_token;
 
     config.headers = {
-      "Authorization": `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0aGFuaCIsImlhdCI6MTcwMzk0NDMyOCwiZXhwIjoxNzA0MDMwNzI4fQ.Q4UGFMzsD9hR-553zP7_uShDMDMVPetJndHt1Prbn3HU-KbpCQr8mvtGX2o3MWF7hvpszZpgCJbMRtMHHszYYA`
+      "Authorization": `Bearer ${token}`
     };
     return config;
   },
