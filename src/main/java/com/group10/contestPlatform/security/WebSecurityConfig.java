@@ -1,6 +1,7 @@
 package com.group10.contestPlatform.security;
 
 
+import com.group10.contestPlatform.entities.RoleEnum;
 import com.group10.contestPlatform.security.jwt.AuthTokenFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
 	private final AuthTokenFilter jwtTokenFilter;
@@ -34,9 +35,9 @@ public class WebSecurityConfig {
 				.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests
-//								.requestMatchers("/api/auth/signup").permitAll()
-//								.requestMatchers("/api/auth/signin").permitAll()
+
 								.requestMatchers("/api/**").permitAll()
+
 								.anyRequest()
 								.authenticated()
 				)

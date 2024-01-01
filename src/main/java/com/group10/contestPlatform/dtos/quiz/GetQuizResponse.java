@@ -1,7 +1,5 @@
 package com.group10.contestPlatform.dtos.quiz;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateQuizRequest {
+public class GetQuizResponse {
     private String title;
-    private String description;
-    private String imageQuizUrl;
-    private String startAt;
-    private String endAt;
-    private List<CreateQuestionRequest> questions;
+    private String avatar;
+    private String slug;
 }

@@ -9,6 +9,7 @@ import com.group10.contestPlatform.dtos.auth.SignUpForm;
 import com.group10.contestPlatform.entities.Role;
 import com.group10.contestPlatform.entities.RoleEnum;
 import com.group10.contestPlatform.entities.User;
+import com.group10.contestPlatform.exceptions.DataNotFoundException;
 import com.group10.contestPlatform.exceptions.LocalizationUtils;
 import com.group10.contestPlatform.security.jwt.JWTUtils;
 import com.group10.contestPlatform.services.IRoleService;
@@ -35,6 +36,8 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.*;
 
 
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 import jakarta.validation.Valid;
@@ -72,7 +75,7 @@ public class AuthController {
 	JWTUtils jwtUtils;
 
 	@PostMapping(value = "/signup")
-	public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) {
+	public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) throws Exception {
 
 		if (userService.existsByUsername(signUpForm.getUsername())) {
 			return new ResponseEntity<>(new ResponMessage("nouser"), HttpStatus.OK);
@@ -102,7 +105,9 @@ public class AuthController {
 			}
 		});
 
-		user.setRoles(rolesEntity);
+		user.setRole((Role) rolesEntity);
+
+
 		userService.save(user);
 
 		return new ResponseEntity<>(new ResponMessage("yes"), HttpStatus.OK);
@@ -128,6 +133,7 @@ public class AuthController {
 					signInForm.getPassword()
 
 			);
+
 
 			User userDetail = userService.getUserDetailsFromToken(token);
 

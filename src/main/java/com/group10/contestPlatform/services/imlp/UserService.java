@@ -47,7 +47,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public User save(User user) {
-		// TODO Auto-generated method stub
+
+
 		return userRepository.save(user);
 	}
 
@@ -85,19 +86,9 @@ public class UserService implements IUserService {
 
 	@Override
 	public void update(User user) {
-		User currentUser = findById(user.getId());
-		mergeUser(currentUser, user);
-		 userRepository.save(currentUser);
+
 	}
-	private void mergeUser(User currentUser, User newUser) {
-		currentUser.setUsername(newUser.getUsername());
-		currentUser.setFirstName(newUser.getFirstName());
-		currentUser.setLastName(newUser.getLastName());
-		currentUser.setRoles(newUser.getRoles());
-		currentUser.setEmail(newUser.getEmail());
-//		currentUser.setPassword(currentUser.getPassword());
-//		currentUser.setAvatar(currentUser.getAvatar());
-	}
+
 
 	@Override
 	public Optional<User> findByUsername(String name) {

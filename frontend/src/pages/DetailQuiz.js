@@ -34,6 +34,7 @@ const DetailQuiz = () => {
       .groupBy("id")
       .map((value, key) => {
 
+        
         let answers = [];
         let questionDescription, image = null;
         value.forEach((item, index) => {

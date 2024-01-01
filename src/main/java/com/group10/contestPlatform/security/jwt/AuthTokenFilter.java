@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -39,8 +40,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 									@NonNull FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			if(isBypassToken(request)) {
-				filterChain.doFilter(request, response); //enable bypass
+			if (request.getServletPath().contains("/api/auth")) {
+				filterChain.doFilter(request, response);
 				return;
 			}
 			final String authHeader = request.getHeader("Authorization");
@@ -53,7 +54,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			if (userName != null
 					&& SecurityContextHolder.getContext().getAuthentication() == null) {
 				User userDetails = (User) userDetailsService.loadUserByUsername(userName);
-				if(jwtUtils.validateToken(token, userDetails)) {
+
+				if (jwtUtils.validateToken(token, userDetails)) {
 					UsernamePasswordAuthenticationToken authenticationToken =
 							new UsernamePasswordAuthenticationToken(
 									userDetails,
@@ -65,10 +67,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				}
 			}
 			filterChain.doFilter(request, response); //enable bypass
-		}catch (Exception e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 		}
-
 	}
 	private boolean isBypassToken(@NonNull  HttpServletRequest request) {
 

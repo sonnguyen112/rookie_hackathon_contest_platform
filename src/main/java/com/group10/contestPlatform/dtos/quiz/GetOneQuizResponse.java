@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateQuizRequest {
+public class GetOneQuizResponse {
     private String title;
     private String description;
     private String imageQuizUrl;
-    private String startAt;
-    private String endAt;
-    private List<CreateQuestionRequest> questions;
+    private Long startAt;
+    private Long endAt;
+    private List<GetOneQuestionResponse> questions;
+    private List<GetOneAnswerResponse> answers;
 }
