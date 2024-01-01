@@ -18,7 +18,7 @@ const Profile = (props) => {
   const [width, setWidth] = useState(0);
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(props.profile.avatar);
+  const [selectedImage, setSelectedImage] = useState(props.profile?.avatar);
   const [profile, setProfile] = useState(props.profile);
   const [success, setSuccess] = useState(false);
   const [open, setOpen] = useState(false);

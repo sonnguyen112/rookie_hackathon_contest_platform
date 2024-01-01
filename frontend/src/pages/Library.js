@@ -3,46 +3,41 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../App.css";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { getAllQuiz, getOneQuiz } from "../services/apiService";
 
 const Library = (props) => {
   let navigate = useNavigate();
   const [quizs, setQuizs] = useState(Array(0).fill(null));
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    async function GetData(url = "") {
-      const response = await fetch(url, {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "token " + props.token,
-        },
-      });
-      // Default options are marked with *
+    async function GetData() {
+      let data = await getAllQuiz();
+   
 
-      let data = await response.json(); // parses JSON response into native JavaScript objects
+      // let data = await response.json(); // parses JSON response into native JavaScript objects
       console.log(data);
       setQuizs(data);
       setLoading(false);
     }
-    GetData("http://localhost:8080/api/v1/quiz/get_all_quiz");
+    GetData();
   }, [loading]);
 
   const handleEditQuiz = (index) => {
     setLoading(true);
     async function fetchQuiz() {
-      const response = await fetch(
-        "http://localhost:8080/api/v1/quiz/get_one_quiz/" + quizs[index]["slug"],
-        {
-          mode: "cors",
-          method: "GET",
-          headers: [
-            ["Content-Type", "application/json"],
-            ["Authorization", "token " + props.token],
-          ],
-        }
-      );
-      const editQuiz = await response.json();
+      // const response = await fetch(
+      //   "http://localhost:8080/api/v1/quiz/get_one_quiz/" + quizs[index]["slug"],
+      //   {
+      //     mode: "cors",
+      //     method: "GET",
+      //     headers: [
+      //       ["Content-Type", "application/json"],
+      //       ["Authorization", "token " + props.token],
+      //     ],
+      //   }
+      // );
+      let editQuiz = await getOneQuiz(quizs[index]["slug"]);
+      
       console.log("before edit", editQuiz);
       setLoading(false);
       navigate("/create-quiz", {
@@ -118,8 +113,8 @@ const Library = (props) => {
       </Backdrop>
       {quizs.map((item, index) => (
         <BLASKItem
-          username={props.profile["username"]}
-          avatar={props.profile.avatar}
+       
+          // avatar={props?.profile.avatar}
           value={item}
           deleteQuiz={() => handleDeleteQuiz(index)}
           editQuiz={() => handleEditQuiz(index)}

@@ -26,10 +26,14 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../style/navbav.css";
+import { useDispatch, useSelector } from "react-redux";
+import { doLogout } from "../redux/action/userAction";
+import { toast } from "react-toastify";
 
 const pages = ["Home", "Library", "Minigame"];
 const settings = ["Profile", "Sign out"];
-
+// const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+// const account = useSelector((state) => state.user.account);
 function ResponsiveAppBar(props) {
   let navigate = useNavigate();
   const theme = createTheme({
@@ -42,7 +46,7 @@ function ResponsiveAppBar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const ref = useRef(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     props.setHeight(ref.current.clientHeight);
   }, [props]);
@@ -61,19 +65,15 @@ function ResponsiveAppBar(props) {
       case 0:
         break;
       case 1:
-        console.log("logout");
-        window.localStorage.removeItem("token");
-        window.localStorage.removeItem("profile");
-        window.localStorage.removeItem("remember");
-        props.setToken("");
-        props.setProfile({
-          username: "",
-          firstname: "",
-          lastname: "",
-          email: "",
-          avatar: "",
-        });
-        navigate("/");
+        let res = fetch("http://localhost:8080/api/auth/logout")
+        if (res) {
+
+          dispatch(doLogout())
+         // navigate("/");
+        } else {
+          toast.error("False")
+        }
+     
         break;
       default:
         break;
@@ -286,8 +286,8 @@ function ResponsiveAppBar(props) {
                   <Tooltip title="Settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
-                        alt={props.profile.firstname}
-                        src={props.profile.avatar}
+                        // alt={account.firstname}
+                        // src={account.avatar}
                       />
                     </IconButton>
                   </Tooltip>

@@ -15,8 +15,11 @@ import LinearProgress from "@mui/material/LinearProgress";
 import LoginIcon from "@mui/icons-material/Login";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
+import { useDispatch } from "react-redux";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { postLogin } from "../services/apiService";
+import { doLogin } from "../redux/action/userAction";
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -40,63 +43,47 @@ const theme = createTheme();
 
 export default function Login(props) {
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   const [remember, setRemember] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState(false);
-  const handleSubmit = (event) => {
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
     const username = data.get("username");
     const password = data.get("password");
-
-    sendDataSignup();
-
-    function sendDataSignup() {
+  
+    try {
+      setLoading(true);
+  
       const signInData = {
         username: username,
         password: password,
       };
-      setLoading(true);
-
-      async function fetchLogin() {
-        const response = await fetch("http://localhost:8000/auth/api/sign_in", {
-          mode: "cors",
-          method: "POST",
-          headers: [["Content-Type", "application/json"]],
-          body: JSON.stringify(signInData),
-        });
-
-        if (response.status === 200) {
-          const json = await response.json();
-          const profile = {
-            username: json.username,
-            firstname: json.first_name,
-            lastname: json.last_name,
-            email: json.email,
-            avatar: json.avatar,
-          };
-          props.setToken(json.token);
-          props.setProfile(profile);
-          if (remember) {
-            window.localStorage.setItem("token", json.token);
-            window.localStorage.setItem("profile", JSON.stringify(profile));
-            window.localStorage.setItem("remember", "1");
-          } else {
-            window.sessionStorage.setItem("token", json.token);
-            window.sessionStorage.setItem("profile", JSON.stringify(profile));
-          }
-          window.localStorage.setItem("loginInfo", JSON.stringify(signInData));
-          setLoading(false);
-          navigate("/");
-        } else {
-          setLoading(false);
-          setErrorMessage(true);
-        }
+  
+      let response = await postLogin(username, password);
+      
+      if (response != "Invalid username or password.") {
+        dispatch(doLogin(response));
+        setLoading(false);
+        navigate("/");
+   
+      } else if (response === "Invalid username or password.") {
+        setLoading(false);
+    
+        console.log(response)
+        toast.error(response)
       }
-      fetchLogin();
+    } catch (error) {
+      console.error("Error during login:", error);
+      setLoading(false);
+    
     }
   };
+  
 
   const handleRemember = (event) => {
     setRemember(event.target.checked);

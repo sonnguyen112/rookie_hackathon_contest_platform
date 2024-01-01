@@ -13,31 +13,32 @@ import Profile from "./Profile";
 import Reports from "./Reports";
 import Signup from "./Signup";
 import NoPage from "./NoPage";
+import { useSelector } from "react-redux";
 
 const NavPages = (props) => {
   const [height, setHeight] = React.useState(0);
-  console.log("avatar", props.profile.avatar);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const account = useSelector((state) => state.user.account);
+  console.log(account)
   return (
     <>
       <CssBaseline />
       <Top />
       <NavBav
-        token={props.token}
-        profile={props.profile}
-        setProfile={props.setProfile}
-        setToken={props.setToken}
+        token={account.access_token}
+        
         setHeight={setHeight}
         height={height}
       />
       <ScrollTop showBelow={150} />
       <Routes>
-        <Route index element={<Home token={props.token} />} />
-        <Route path="home" element={<Home token={props.token} />} />
+        <Route index element={<Home token={account.access_token} />} />
+        <Route path="home" element={<Home token={account.access_token} />} />
         <Route
           path="library"
           element={
-            props.token.trim() !== "" ? (
-              <Library profile={props.profile} token={props.token} />
+            account.access_token.trim() !== "" ? (
+              <Library profile={props.profile} token={account.access_token} />
             ) : (
               <Login
                 setToken={props.setToken}
@@ -62,11 +63,11 @@ const NavPages = (props) => {
         <Route
           path="profile"
           element={
-            props.token.trim() !== "" ? (
+            account.access_token.trim() !== "" ? (
               <Profile
                 profile={props.profile}
                 height={height}
-                token={props.token}
+                token={account.access_token}
                 setToken={props.setToken}
                 setProfile={props.setProfile}
               />

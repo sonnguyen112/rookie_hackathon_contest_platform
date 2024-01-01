@@ -1,10 +1,14 @@
 package com.group10.contestPlatform.services;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.group10.contestPlatform.dtos.quiz.CreateAnswerRequest;
@@ -31,12 +35,16 @@ public class QuizService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final AmazonClient amazonClient;
+
     @Value("${urlDefautQuiz}")
     private String urlDefautQuiz;
 
     public void createQuiz(CreateQuizRequest createQuizRequest) {
         try {
-            User testUser = userRepository.findByUsername("admin");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentPrincipalName = authentication.getName();
+
+            User testUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
             Quiz newQuiz = new Quiz();
             newQuiz.setTitle(createQuizRequest.getTitle());
             newQuiz.setContent(createQuizRequest.getDescription());
@@ -77,7 +85,9 @@ public class QuizService {
 
     public List<Quiz> getAllQuizzes() {
         try {
-            User testUser = userRepository.findByUsername("admin");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentPrincipalName = authentication.getName();
+            User testUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
             List<Quiz> allQuizzes = quizRepository.findAllByHost(testUser);
             // System.out.println(allQuizzes);
             return allQuizzes;

@@ -15,6 +15,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CreateBar from "../components/CreateBar";
 import ContentQuiz from "../components/ContentQuiz";
 import defaultImage from "../assets/images/Grey_thumb.png";
+import { postCreateOrUpdateQuiz } from "../services/apiService";
 
 const CreateQuiz = (props) => {
   const [height, setHeight] = useState(0);
@@ -199,18 +200,19 @@ const CreateQuiz = (props) => {
   async function fetchCreateQuiz(edit, quizCreate) {
     const link =
       edit === 1
-        ? `http://localhost:8080/api/v1/quiz/update_quiz/${slug}`
-        : "http://localhost:8080/api/v1/quiz/create_quiz";
+        ? `api/v1/quiz/update_quiz/${slug}`
+        : "api/v1/quiz/create_quiz";
     const methodS = edit === 1 ? "PUT" : "POST";
-    const response = await fetch(link, {
-      mode: "cors",
-      method: methodS,
-      headers: [
-        ["Content-Type", "application/json"],
-        ["Authorization", "token " + props.token],
-      ],
-      body: JSON.stringify(quizCreate),
-    });
+    // const response = await fetch(link, {
+    //   mode: "cors",
+    //   method: methodS,
+    //   headers: [
+    //     ["Content-Type", "application/json"],
+    //     ["Authorization", "token " + props.token],
+    //   ],
+    //   body: JSON.stringify(quizCreate),
+    // });
+    let response = await postCreateOrUpdateQuiz(methodS,link,quizCreate);
     setLoading(false);
     navigate("/library");
   }

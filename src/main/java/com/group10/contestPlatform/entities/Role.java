@@ -1,18 +1,10 @@
 package com.group10.contestPlatform.entities;
 
-import java.util.List;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 @Data
 @Builder
@@ -20,12 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "role")
+@Getter
+@Setter
 public class Role {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+
+    @Column(name = "name", nullable = false)
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+
+    public static String ADMIN = "ADMIN";
+    public static String USER = "USER";
+
 }
