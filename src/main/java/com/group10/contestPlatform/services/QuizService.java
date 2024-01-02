@@ -2,9 +2,12 @@ package com.group10.contestPlatform.services;
 
 import java.security.Principal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import com.group10.contestPlatform.utils.CommonUtils;
+import com.group10.contestPlatform.utils.QuizSpecification;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -101,6 +104,12 @@ public class QuizService {
         Quiz quiz = quizRepository.findBySlug(slug).orElseThrow(() -> new AppException(400, 3));
         // System.out.println(quiz);
         return quiz;
+    }
+
+    public List<Quiz> searchQuiz(String name, String dateStart, String endStart){
+        LocalDate start = CommonUtils.convertToLocalDate(dateStart);
+        LocalDate end = CommonUtils.convertToLocalDate(endStart);
+        return quizRepository.findAll(QuizSpecification.quickSearch(name, start, end));
     }
 
 }
