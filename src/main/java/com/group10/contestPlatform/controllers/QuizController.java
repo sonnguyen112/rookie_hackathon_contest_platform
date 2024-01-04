@@ -2,16 +2,11 @@ package com.group10.contestPlatform.controllers;
 
 import java.util.List;
 
+import com.group10.contestPlatform.dtos.quiz.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
-import com.group10.contestPlatform.dtos.quiz.CreateQuizResponse;
-import com.group10.contestPlatform.dtos.quiz.GetOneAnswerResponse;
-import com.group10.contestPlatform.dtos.quiz.GetOneQuestionResponse;
-import com.group10.contestPlatform.dtos.quiz.GetOneQuizResponse;
-import com.group10.contestPlatform.dtos.quiz.GetQuizResponse;
 import com.group10.contestPlatform.entities.Quiz;
 import com.group10.contestPlatform.services.QuizService;
 
@@ -57,8 +52,8 @@ public class QuizController {
                                 .toList())
                         .answers(quiz.getAnswers().stream()
                                 .map(answer -> GetOneAnswerResponse.builder().id(answer.getQuestion().getId())
-                                        .content(answer.getContent())
-                                        .is_true(answer.getCorrect()).build())
+                                        .answerText(answer.getContent())
+                                        .correct(answer.getCorrect()).build())
                                 .toList())
                         .build()
 
@@ -72,4 +67,11 @@ public class QuizController {
         List<Quiz> quizList = quizService.searchQuiz(name, dateStart, endStart);
         return ResponseEntity.ok(quizList);
     }
+
+    @GetMapping("/do-quiz")
+    public ResponseEntity<List<GetQuestionResponse>> joinQuiz(@RequestParam Long quizId){
+        List<GetQuestionResponse> questionList = quizService.joinQuiz(quizId);
+        return ResponseEntity.ok(questionList);
+    }
+
 }

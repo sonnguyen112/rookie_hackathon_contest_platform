@@ -3,9 +3,12 @@ package com.group10.contestPlatform.services;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
+import com.group10.contestPlatform.dtos.quiz.*;
 import com.group10.contestPlatform.utils.CommonUtils;
 import com.group10.contestPlatform.utils.QuizSpecification;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.group10.contestPlatform.dtos.quiz.CreateAnswerRequest;
-import com.group10.contestPlatform.dtos.quiz.CreateQuestionRequest;
-import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
 import com.group10.contestPlatform.entities.Answer;
 import com.group10.contestPlatform.entities.Question;
 import com.group10.contestPlatform.entities.Quiz;
@@ -28,6 +28,7 @@ import com.group10.contestPlatform.repositories.QuizRepository;
 import com.group10.contestPlatform.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -110,6 +111,42 @@ public class QuizService {
         LocalDate start = CommonUtils.convertToLocalDate(dateStart);
         LocalDate end = CommonUtils.convertToLocalDate(endStart);
         return quizRepository.findAll(QuizSpecification.quickSearch(name, start, end));
+    }
+
+    public List<GetQuestionResponse> joinQuiz (Long quizId){
+        List<GetQuestionResponse> questionResponseList = new ArrayList<>();
+
+        if(Objects.nonNull(quizId)){
+            List<Question> questions = questionRepository.findByQuizId(quizId);
+
+            if (!CollectionUtils.isEmpty(questions)){
+                for (Question question : questions){
+                    GetQuestionResponse questionResponse = new GetQuestionResponse();
+                    List<GetOneAnswerResponse> answerResponses = new ArrayList<>();
+
+                    questionResponse.setId(question.getId());
+                    questionResponse.setText(question.getContent());
+                    questionResponse.setImage(question.getImgURI());
+
+                    List<Answer> answerList = answerRepository.findByQuestionId(question.getId());
+                    if(!CollectionUtils.isEmpty(answerList)){
+                        for (Answer answer : answerList){
+                            GetOneAnswerResponse answerResponse = new GetOneAnswerResponse();
+                            answerResponse.setId(answer.getId());
+                            answerResponse.setAnswerText(answer.getContent());
+                            answerResponse.setCorrect(answer.getCorrect());
+
+                            answerResponses.add(answerResponse);
+                        }
+                    }
+
+                    questionResponse.setAnswers(answerResponses);
+                    questionResponseList.add(questionResponse);
+                }
+            }
+        }
+
+        return questionResponseList;
     }
 
 }

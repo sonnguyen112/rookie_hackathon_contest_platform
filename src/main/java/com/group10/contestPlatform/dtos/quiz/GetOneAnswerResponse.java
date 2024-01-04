@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetOneAnswerResponse {
     private Long id; // Question id
-    private String content;
-    private Boolean is_true;
+    private String answerText;
+    private Boolean correct;
 }
