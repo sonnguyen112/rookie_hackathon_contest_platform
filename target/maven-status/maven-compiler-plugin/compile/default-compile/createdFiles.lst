@@ -25,7 +25,6 @@ com/group10/contestPlatform/entities/Quiz.class
 com/group10/contestPlatform/entities/Take$TakeBuilder.class
 com/group10/contestPlatform/exceptions/GlobalExceptionHandler.class
 com/group10/contestPlatform/dtos/quiz/CreateQuizResponse.class
-com/group10/contestPlatform/config/SecurityConfiguration.class
 com/group10/contestPlatform/dtos/quiz/CreateAnswerRequest.class
 com/group10/contestPlatform/ContestPlatformApplication.class
 com/group10/contestPlatform/dtos/quiz/CreateQuizRequest.class

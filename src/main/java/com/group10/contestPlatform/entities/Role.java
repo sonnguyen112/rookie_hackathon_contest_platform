@@ -16,7 +16,7 @@ import org.hibernate.annotations.NaturalId;
 @Setter
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "name", nullable = false)
