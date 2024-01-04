@@ -2,7 +2,6 @@ package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,4 +44,8 @@ public class Take {
     private Timestamp finishedAt;
     @OneToMany(mappedBy = "take")
     private List<TakeAnswer> takeAnswers;
+    @Builder.Default
+    private Boolean cheat = false;
+    @OneToMany(mappedBy = "take")
+    private List<CheatInfo> cheatInfos;
 }
