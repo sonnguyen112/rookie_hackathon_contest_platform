@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../App.css";
 import { Backdrop, CircularProgress } from "@mui/material";
-import { getAllQuiz, getOneQuiz } from "../services/apiService";
+import { getAllQuiz, getOneQuiz, deleteOneQuiz } from "../services/apiService";
 
 const Library = (props) => {
   let navigate = useNavigate();
@@ -52,17 +52,18 @@ const Library = (props) => {
     var copyQuizs = [...quizs];
     copyQuizs.splice(index, 1);
     async function fetchDeleteQuiz() {
-      const response = await fetch(
-        `http://localhost:8000/quiz/api/delete_one_quiz/${quizs[index]["slug"]}`,
-        {
-          mode: "cors",
-          method: "DELETE",
-          headers: [
-            ["Content-Type", "application/json"],
-            ["Authorization", "token " + props.token],
-          ],
-        }
-      );
+      // const response = await fetch(
+      //   `http://localhost:8080/api/v1/quiz/delete_one_quiz/${quizs[index]["slug"]}`,
+      //   {
+      //     mode: "cors",
+      //     method: "DELETE",
+      //     headers: [
+      //       ["Content-Type", "application/json"],
+      //       ["Authorization", "token " + props.token],
+      //     ],
+      //   }
+      // );
+      await deleteOneQuiz(quizs[index]["slug"]);
       setQuizs(copyQuizs);
     }
     fetchDeleteQuiz();
