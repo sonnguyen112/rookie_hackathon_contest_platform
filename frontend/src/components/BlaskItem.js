@@ -2,11 +2,11 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
   return (
     <div width="1" className="blask-item">
       <div className="abc">
-        <div>
+        {/* <div>
           <div className="blask-checkbox">
             <input id="cb" type="checkbox" aria-label="Select blask"></input>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="blask-image">
         <img src={value.avatar} alt="" />
@@ -44,11 +44,11 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
                 Start
               </button>
             </div>
-            <div>
+            {/* <div>
               <button className="blask-assign-btn" type="Assign" value="Assign">
                 Assign
               </button>
-            </div>
+            </div> */}
 
             <span>{value.edit_time || ""}</span>
           </div>

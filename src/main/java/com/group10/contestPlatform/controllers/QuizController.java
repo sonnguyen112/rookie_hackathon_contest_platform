@@ -1,17 +1,29 @@
 package com.group10.contestPlatform.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import com.group10.contestPlatform.dtos.quiz.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.group10.contestPlatform.dtos.quiz.CheckCheatRequest;
+import com.group10.contestPlatform.dtos.quiz.CheckCheatResponse;
+import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
+import com.group10.contestPlatform.dtos.quiz.CreateQuizResponse;
+import com.group10.contestPlatform.dtos.quiz.DeleteQuizResponse;
+import com.group10.contestPlatform.dtos.quiz.GetOneAnswerResponse;
+import com.group10.contestPlatform.dtos.quiz.GetOneQuestionResponse;
+import com.group10.contestPlatform.dtos.quiz.GetOneQuizResponse;
+import com.group10.contestPlatform.dtos.quiz.GetQuizResponse;
 import com.group10.contestPlatform.entities.Quiz;
 import com.group10.contestPlatform.services.QuizService;
 
@@ -79,4 +91,21 @@ public class QuizController {
         return ResponseEntity.ok(questionList);
     }
 
+    @PutMapping("/update_quiz/{slug}")
+    public ResponseEntity<CreateQuizResponse> updateQuiz(@RequestBody CreateQuizRequest updateQuizRequest, @PathVariable String slug) {
+        quizService.updateQuiz(updateQuizRequest, slug);
+        return ResponseEntity.status(200)
+                .body(CreateQuizResponse.builder().message("Quiz created successfully").build());
+    }
+
+    @DeleteMapping("/delete_one_quiz/{slug}")
+    public ResponseEntity<DeleteQuizResponse> deleteQuiz(@PathVariable String slug) {
+        quizService.deleteQuiz(slug);
+        return ResponseEntity.status(200).body(DeleteQuizResponse.builder().message("Quiz deleted successfully").build());
+    }
+
+    @PostMapping("/check_cheat")
+    public ResponseEntity<CheckCheatResponse> checkCheat(@RequestBody CheckCheatRequest checkCheatRequest) {
+        return ResponseEntity.status(200).body(quizService.checkCheat(checkCheatRequest));
+    }
 }
