@@ -98,6 +98,11 @@ const postCreateOrUpdateQuiz = (methodS,link,quizCreate) => {
  
 };
 
+const deleteOneQuiz = (slug) => {
+
+  return axios.delete(`api/v1/quiz/delete_one_quiz/${slug}`);
+}
+
 const putUpdateQuizForAdmin = (id, namequiz, imagequiz, description) => {
 
   const data = new FormData();
@@ -173,6 +178,7 @@ export {
   getAllQuiz,
   putUpdateQuizForAdmin,
   deleteQuizForAdmin,
+  deleteOneQuiz,
   getOneQuiz,
   postCreateNewAnswerForQuestion,
   postCreateNewQuestionForQuiz,

@@ -25,6 +25,7 @@ public class ErrorCode {
         dictError.put(10, "Expired JWT token");
         dictError.put(11, "Unsupported JWT token");
         dictError.put(12, "JWT claims string is empty.");
+        dictError.put(13, "Not permission");
 
 
         dictError.put(100, "Something Error");

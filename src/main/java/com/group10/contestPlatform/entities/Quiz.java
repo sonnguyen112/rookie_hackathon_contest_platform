@@ -2,11 +2,10 @@ package com.group10.contestPlatform.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -48,9 +47,9 @@ public class Quiz {
     @Column(nullable = false)
     private Timestamp endAt;
     private String content;
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Question> questions;
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
     @OneToMany(mappedBy = "quiz")
     private List<Take> takes;

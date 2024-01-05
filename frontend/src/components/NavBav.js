@@ -45,6 +45,8 @@ function ResponsiveAppBar(props) {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const account = useSelector((state) => state.user.account);
+
 
   const ref = useRef(null);
   const dispatch = useDispatch();
@@ -52,7 +54,7 @@ function ResponsiveAppBar(props) {
     props.setHeight(ref.current.clientHeight);
   }, [props]);
 
-  const handleLogin = () => {};
+  const handleLogin = () => { };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -70,11 +72,11 @@ function ResponsiveAppBar(props) {
         if (res) {
 
           dispatch(doLogout())
-         // navigate("/");
+          // navigate("/");
         } else {
           toast.error("False")
         }
-     
+
         break;
       default:
         break;
@@ -274,21 +276,23 @@ function ResponsiveAppBar(props) {
 
             {props?.token !== "" ? (
               <>
-                <Tooltip title="Create">
-                  <IconButton
-                    component={Link}
-                    to="/create-quiz"
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#fff",
-                      color: "#1976d2",
-                      "&:hover": { color: "#fff" },
-                    }}
-                  >
-                    <AddIcon sx={{ fontSize: "25px" }} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Play">
+                {account.role[0] === "ROLE_ADMIN" ?
+                  <Tooltip title="Create" style={{ marginRight: "10px" }}>
+                    <IconButton
+                      component={Link}
+                      to="/create-quiz"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#fff",
+                        color: "#1976d2",
+                        "&:hover": { color: "#fff" },
+                      }}
+                    >
+                      <AddIcon sx={{ fontSize: "25px" }} />
+                    </IconButton>
+                  </Tooltip> : null}
+
+                {/* <Tooltip title="Play">
                   <IconButton
                     component={Link}
                     to="joinin"
@@ -302,14 +306,14 @@ function ResponsiveAppBar(props) {
                   >
                     <PlayArrowIcon sx={{ fontSize: "25px" }} />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
 
                 <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title="Settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
-                        // alt={account.firstname}
-                        // src={account.avatar}
+                      // alt={account.firstname}
+                      // src={account.avatar}
                       />
                     </IconButton>
                   </Tooltip>
@@ -348,14 +352,14 @@ function ResponsiveAppBar(props) {
               </>
             ) : (
               <Box sx={{ flexGrow: 0 }}>
-                <Button
+                {/* <Button
                   component={Link}
                   to="joinin"
                   variant="contained"
                   sx={{ m: 1, backgroundColor: "#e3f2fd", color: "#000" }}
                 >
                   Play
-                </Button>
+                </Button> */}
                 <Button
                   component={Link}
                   to="login"

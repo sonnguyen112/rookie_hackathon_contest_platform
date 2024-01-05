@@ -37,11 +37,14 @@ const CreateQuiz = (props) => {
       { content: "", is_true: false },
     ],
     imageQuestionUrl: defaultImage,
-    point: 50,
+    point: 10,
     time: 10,
   };
   const [edit, setEdit] = useState(false);
   const [question, setQuestion] = useState([defaultQuestion]);
+  useEffect(() => {
+    console.log("Question change", question);
+  }, [question])
   const [open, setOpen] = useState(false);
   const [messageError, setMessageError] = useState({
     title: "",
@@ -56,13 +59,14 @@ const CreateQuiz = (props) => {
       setEdit(location.state.edit);
 
       const list_ques = location.state.quiz.questions;
-      console.log("list_ques", location.state);
       const list_opts = location.state.quiz.answers;
+      console.log(list_ques, list_opts);
       const ques = [];
       if (list_ques.length !== 0) {
         list_ques.map((q) => {
           if (list_opts.length !== 0) {
-            const opt = list_opts.filter((o) => o.question === q.id);
+            const opt = list_opts.filter((o) => o.id === q.id);
+
             var optionsTmp = [];
             opt.map((o) => {
               optionsTmp.push({ content: o.content, is_true: o.is_true });
@@ -80,6 +84,7 @@ const CreateQuiz = (props) => {
           }
         });
       }
+
       setQuestion(ques);
       setSlug(location.state.slug);
       setImgQuiz(location.state.quiz.imageQuizUrl);
@@ -119,9 +124,11 @@ const CreateQuiz = (props) => {
       startAt: String(startTime),
       endAt: String(endTime),
     };
+
     const getImageToBase64 = async (url) => {
       const data = await fetch(url);
       const blob = await data.blob();
+
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -130,7 +137,7 @@ const CreateQuiz = (props) => {
           resolve(base64data);
         };
       });
-    };
+    }
     const copyImgQuiz = await getImageToBase64(imgQuiz);
     if (copyImgQuiz.trim() !== "" && copyImgQuiz.startsWith("data:image")) {
       quizCreate.imageQuizUrl = copyImgQuiz.substring(
@@ -144,18 +151,20 @@ const CreateQuiz = (props) => {
       checkError = true;
       message.title = "Please set the title of quiz.";
     }
-    if (quizCreate.startTime === "") {
+    if (startTime === null) {
       checkError = true;
       message.startTime = "Please set the start time of quiz.";
     }
-    if (quizCreate.endTime === "") {
+    if (endTime === null) {
       checkError = true;
       message.endTime = "Please set the end time of quiz.";
     }
+
     for (let i = 0; i < quizCreate.questions.length; i++) {
       const copyImgQuestion = await getImageToBase64(
         quizCreate.questions[i].imageQuestionUrl
       );
+
       quizCreate.questions[i].imageQuestionUrl = copyImgQuestion.substring(
         copyImgQuestion.search("base64,") + 7
       );
@@ -212,7 +221,7 @@ const CreateQuiz = (props) => {
     //   ],
     //   body: JSON.stringify(quizCreate),
     // });
-    let response = await postCreateOrUpdateQuiz(methodS,link,quizCreate);
+    let response = await postCreateOrUpdateQuiz(methodS, link, quizCreate);
     setLoading(false);
     navigate("/library");
   }
@@ -267,13 +276,11 @@ const CreateQuiz = (props) => {
           {messageError.startTime.trim() !== "" && (
             <DialogContentText id="alert-dialog-description">
               Please set the start time of quiz.
-              {messageError.startTime}.
             </DialogContentText>
           )}
           {messageError.endTime.trim() !== "" && (
             <DialogContentText id="alert-dialog-description">
               Please set the end time of quiz.
-              {messageError.endTime}.
             </DialogContentText>
           )}
         </DialogContent>
