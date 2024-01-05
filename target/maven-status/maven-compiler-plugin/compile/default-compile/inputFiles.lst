@@ -5,6 +5,7 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/ErrorResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/SignInForm.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/SignUpForm.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/CheckCheatResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/IUserService.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/security/jwt/AuthTokenFilter.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/utils/CommonUtils.java
@@ -25,7 +26,9 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/imlp/UserService.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/config/SecurityConfiguration.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/Answer.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/CheatInfo.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/controllers/QuizController.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/DeleteQuizResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/Role.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/exceptions/DataNotFoundException.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/common/CustomMultipartFile.java
@@ -51,6 +54,7 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/ResponMessage.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/repositories/UserRepository.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/exceptions/LocalizationUtils.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/CheckCheatRequest.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/Quiz.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/GetQuizResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/GetOneAnswerResponse.java

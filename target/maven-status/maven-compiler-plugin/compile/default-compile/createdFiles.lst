@@ -3,7 +3,6 @@ com/group10/contestPlatform/entities/Role.class
 com/group10/contestPlatform/entities/User$UserBuilder.class
 com/group10/contestPlatform/dtos/quiz/CreateAnswerRequest$CreateAnswerRequestBuilder.class
 com/group10/contestPlatform/services/QuizService.class
-com/group10/contestPlatform/controllers/QuizController.class
 com/group10/contestPlatform/repositories/QuizRepository.class
 com/group10/contestPlatform/exceptions/AppException$AppExceptionBuilder.class
 com/group10/contestPlatform/entities/Quiz$QuizBuilder.class

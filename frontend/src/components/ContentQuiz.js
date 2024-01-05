@@ -23,7 +23,7 @@ import defaultImage from "../assets/images/Grey_thumb.png";
 
 const ContentQuiz = (props) => {
   const timeSelect = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
-  const pointSelect = [50, 60, 70, 80, 100, 110, 120, 150, 200, 250, 300];
+  const pointSelect = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   const defaultQuestion = {
     name: "Question",
@@ -34,7 +34,7 @@ const ContentQuiz = (props) => {
       { content: "", is_true: false },
     ],
     imageQuestionUrl: defaultImage,
-    point: 50,
+    point: 10,
     time: 10,
   };
 
@@ -256,7 +256,7 @@ const ContentQuiz = (props) => {
             sx={{ width: { md: "65%", xs: "40%" } }}
             onChange={handleNameQues}
           />
-          <FormControl sx={{ width: { xs: "20%", md: "12%" } }}>
+          {/* <FormControl sx={{ width: { xs: "20%", md: "12%" } }}>
             <InputLabel id="time-select-label" color="secondary">
               <AccessTimeIcon />
             </InputLabel>
@@ -276,7 +276,7 @@ const ContentQuiz = (props) => {
                 );
               })}
             </Select>
-          </FormControl>
+          </FormControl> */}
           <FormControl sx={{ width: { xs: "20%", md: "12%" } }}>
             <InputLabel color="secondary" id="point-select-label">
               <SportsScoreIcon />
