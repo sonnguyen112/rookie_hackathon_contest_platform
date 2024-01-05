@@ -1,13 +1,13 @@
 import axios from "../utils/axiosCustomize";
 
-const postCreateNewUser = (email, password, username, fullname, role, image) => {
+const postCreateNewUser = (email, password, username, firstName,lastName, role, image) => {
   const data = {
     email: email,
-    password: password,
     username: username,
-    fullname: fullname,
-    roles: role,
-    avatar: image
+    password: password,
+    firstName: firstName,
+    password: password,
+    role_id: role
   };
   return axios.post("api/auth/signup", data);
 };
@@ -15,8 +15,21 @@ const postCreateNewUser = (email, password, username, fullname, role, image) => 
 const getAllusers = () => {
   return axios.get("api/auth/user");
 };
-const getUserWithPaginate = (page, limit) => {
-  return axios.get(`api/auth/user?page=${page}&limit=${limit}`);
+const getUserWithPaginate = (page, searchTerm, selectedRole) => {
+
+  let apiUrl = `api/auth/users/page/${page}?sortField=firstName&sortDir=asc`;
+
+
+  if (searchTerm) {
+    apiUrl += `&keyword=${searchTerm}`;
+  }
+
+  if (selectedRole) {
+    apiUrl += `&roleId=${selectedRole}`;
+  }
+
+
+  return axios.get(apiUrl);
 };
 const getQuizByUser = () => {
   return axios.get("api/v1/quiz/list-quiz");
@@ -37,14 +50,16 @@ const getOneQuiz = (id) => {
 const deleteQuizForAdmin = (data) => {
   return axios.delete(`api/v1/quiz`, { data: data });
 };
-const putUpdateUser = (id, email, username, fullname, role) => {
+const putUpdateUser = (id, email, username,firstName, lastName, password,role) => {
 
 
   return axios.put(`api/auth/update/${id}`, {
     email: email,
     username: username,
-    fullname: fullname,
-    roles: role
+    firstName: firstName,
+    lastName: lastName,
+    lastName: lastName,
+    role_id: role
 
   });
 };
@@ -53,6 +68,12 @@ const deleteUser = (userId) => {
 };
 const postLogin = (username, password) => {
   return axios.post("api/auth/signin", { username, password });
+};
+const postForgotPassword = (email) => {
+  return axios.post("api/auth/forgot_password", { email });
+};
+const postResetPassword = (token,password) => {
+  return axios.post(`api/auth/reset_password?token=${token}&password=${password}`, );
 };
 const postSubmitQuiz = (quizId, data) => {
 
@@ -138,6 +159,8 @@ export {
   getAllusers,
   putUpdateUser,
   deleteUser,
+  postResetPassword,
+  postForgotPassword,
   getUserWithPaginate,
   postLogin,
   postRegister,

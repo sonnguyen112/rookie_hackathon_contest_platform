@@ -1,6 +1,6 @@
 package com.group10.contestPlatform.dtos;
 
-public class ResponMessage {
+public class ResponMessage extends Throwable {
 	private String message;
 
 	public ResponMessage() {

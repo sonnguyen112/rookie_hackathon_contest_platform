@@ -56,6 +56,9 @@ public class User implements UserDetails{
     @ColumnDefault("0")
     private int googleAccountId;
 
+
+    @Column(name = "reset_password_token", length = 30)
+    private String resetPasswordToken;
     public User(String username, String firstName, String email, String lastName, String encode) {
         this.username = username;
         this.firstName = firstName;

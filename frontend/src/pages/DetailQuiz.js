@@ -26,7 +26,7 @@ const DetailQuiz = () => {
   }, [quizId]);
 
   const fetchQuestions = async () => {
-
+    console.log(quizId)
     let res = await getDataQuiz(quizId);
     let raw = res
 
