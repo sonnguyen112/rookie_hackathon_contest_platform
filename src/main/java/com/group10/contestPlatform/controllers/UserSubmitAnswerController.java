@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/quiz")
+@RequestMapping("api/v1/take")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserSubmitAnswerController {
     private final SubmitAnswerService submitAnswerService;
 

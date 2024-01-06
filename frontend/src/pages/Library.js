@@ -69,7 +69,8 @@ const Library = (props) => {
     fetchDeleteQuiz();
   };
 
-  async function handleCreateRoom(index) {
+  // async function handlePlayQuiz(index) {
+
     // const response = await fetch('http://localhost:8000/room/api/get_quiz/' , {
     //   method: 'GET', // *GET, POST, PUT, DELETE, etc.
     //   mode: 'cors', // no-cors, *cors, same-origin
@@ -78,35 +79,35 @@ const Library = (props) => {
     //     'Authorization': 'token ' + props.token
     //   },
     // });
-    const response2 = await fetch(
-      "http://localhost:8000/room/api/create_room/" + quizs[index]["slug"],
-      {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "token " + props.token,
-        },
-      }
-    );
-    // let data = await response.json()
-    let data2 = await response2.json();
-    navigate("/room", {
-      state: {
-        // question_info: data,
-        quiz_info: data2,
-        /*
-        pin:
-        token_host:
-        title:
-        description:
-        list_question:
-        list_option:
-      */
-        my_token: props.token,
-      },
-    });
-  }
+    // const response2 = await fetch(
+    //   "http://localhost:8000/room/api/create_room/" + quizs[index]["slug"],
+    //   {
+    //     method: "GET", // *GET, POST, PUT, DELETE, etc.
+    //     mode: "cors", // no-cors, *cors, same-origin
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "token " + props.token,
+    //     },
+    //   }
+    // );
+    // // let data = await response.json()
+    // let data2 = await response2.json();
+    // navigate("/room", {
+    //   state: {
+    //     // question_info: data,
+    //     quiz_info: data2,
+    //     /*
+    //     pin:
+    //     token_host:
+    //     title:
+    //     description:
+    //     list_question:
+    //     list_option:
+    //   */
+    //     my_token: props.token,
+    //   },
+    // });
+  // }
   return (
     <div className="blask-list">
       <Backdrop open={loading} sx={{ zIndex: 100 }}>
@@ -119,7 +120,9 @@ const Library = (props) => {
           value={item}
           deleteQuiz={() => handleDeleteQuiz(index)}
           editQuiz={() => handleEditQuiz(index)}
-          onClick={() => handleCreateRoom(index)}
+          onClick={() =>
+            navigate(`/play_quiz/${item.id}`)
+          }
         ></BLASKItem>
       ))}
     </div>

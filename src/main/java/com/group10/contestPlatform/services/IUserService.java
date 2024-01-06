@@ -1,9 +1,12 @@
 package com.group10.contestPlatform.services;
 
+import com.group10.contestPlatform.dtos.auth.ChangeProfileForm;
+import com.group10.contestPlatform.dtos.auth.TakeUserCheatedResponse;
+import com.group10.contestPlatform.dtos.auth.UserResponse;
 import com.group10.contestPlatform.entities.User;
 
-import com.group10.contestPlatform.exceptions.DataNotFoundException;
 import org.springframework.data.domain.Pageable;
+import paging.PagingAndSortingHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,5 +26,15 @@ public interface IUserService {
 
     String login(String username, String password) throws Exception;
 
-    User getUserDetailsFromToken(String token)throws Exception;
+	String updateResetPasswordToken(String token) throws Exception;
+
+	User getUserDetailsFromToken(String token) throws Exception;
+
+    void updatePassword(String token, String password) throws Exception;
+
+	UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId, Integer userCheated);
+
+	User updateUser(Long id, ChangeProfileForm changeProfileForm) throws Exception;
+
+
 }

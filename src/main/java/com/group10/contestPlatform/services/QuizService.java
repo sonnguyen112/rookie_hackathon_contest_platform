@@ -129,14 +129,14 @@ public class QuizService {
         return quizRepository.findAll(QuizSpecification.quickSearch(name, start, end));
     }
 
-    public List<GetQuestionResponse> joinQuiz (Long quizId){
+    public List<GetQuestionResponse> joinQuiz (Long quizId) {
         List<GetQuestionResponse> questionResponseList = new ArrayList<>();
 
-        if(Objects.nonNull(quizId)){
+        if (Objects.nonNull(quizId)) {
             List<Question> questions = questionRepository.findByQuizId(quizId);
 
-            if (!CollectionUtils.isEmpty(questions)){
-                for (Question question : questions){
+            if (!CollectionUtils.isEmpty(questions)) {
+                for (Question question : questions) {
                     GetQuestionResponse questionResponse = new GetQuestionResponse();
                     List<GetOneAnswerResponse> answerResponses = new ArrayList<>();
 
@@ -145,8 +145,8 @@ public class QuizService {
                     questionResponse.setImage(question.getImgURI());
 
                     List<Answer> answerList = answerRepository.findByQuestionId(question.getId());
-                    if(!CollectionUtils.isEmpty(answerList)){
-                        for (Answer answer : answerList){
+                    if (!CollectionUtils.isEmpty(answerList)) {
+                        for (Answer answer : answerList) {
                             GetOneAnswerResponse answerResponse = new GetOneAnswerResponse();
                             answerResponse.setId(answer.getId());
                             answerResponse.setAnswerText(answer.getContent());
@@ -163,7 +163,7 @@ public class QuizService {
         }
 
         return questionResponseList;
-
+    }
     @Transactional
     public void updateQuiz(CreateQuizRequest updateQuizRequest, String slug) {
         try {
@@ -240,7 +240,7 @@ public class QuizService {
             fastapiUrl + "/api/v1/quiz/check_cheat", 
             checkCheatRequest,
             CheckCheatResponse.class);
-        // System.out.println(response.getBody());
+
         return response.getBody();
     }
 

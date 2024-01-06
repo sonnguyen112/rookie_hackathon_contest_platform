@@ -30,11 +30,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { doLogout } from "../redux/action/userAction";
 import { toast } from "react-toastify";
 
-const pages = ["Home", "Library", "Minigame"];
+const pages = ["Home", "Library", "Manages User"];
 const settings = ["Profile", "Sign out"];
-// const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-// const account = useSelector((state) => state.user.account);
+
 function ResponsiveAppBar(props) {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+// const account = useSelector((state) => state.user.account);
   let navigate = useNavigate();
   const theme = createTheme({
     palette: {
@@ -233,7 +234,7 @@ function ResponsiveAppBar(props) {
                 />
                 {pages[1]}
               </Button>
-              <Button
+              {/* <Button
                 className="underline-button"
                 component={Link}
                 to="/minigame"
@@ -249,10 +250,31 @@ function ResponsiveAppBar(props) {
                   }}
                 />
                 {pages[2]}
-              </Button>
+              </Button> */}
+                 {isAuthenticated === true &&
+                   <Button
+                   className="underline-button"
+                   component={Link}
+                   to="/manage-users"
+                   key={pages[2]}
+                   onClick={handleCloseNavMenu}
+                   sx={{ my: 2, color: "white", display: "flex" }}
+                 >
+                   <AnalyticsIcon
+                     sx={{
+                       display: { xs: "none", md: "flex" },
+                       mr: 1,
+                       fontSize: "medium",
+                     }}
+                   />
+                   {pages[2]}
+                 </Button>
+                 }
+             
+              
             </Box>
 
-            {props.token.trim() !== "" ? (
+            {props?.token !== "" ? (
               <>
                 {account.role[0] === "ROLE_ADMIN" ?
                   <Tooltip title="Create" style={{ marginRight: "10px" }}>
