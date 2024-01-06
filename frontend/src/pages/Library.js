@@ -70,6 +70,7 @@ const Library = (props) => {
   };
 
   async function handleCreateRoom(index) {
+    console.log(1)
     // const response = await fetch('http://localhost:8000/room/api/get_quiz/' , {
     //   method: 'GET', // *GET, POST, PUT, DELETE, etc.
     //   mode: 'cors', // no-cors, *cors, same-origin
@@ -78,34 +79,34 @@ const Library = (props) => {
     //     'Authorization': 'token ' + props.token
     //   },
     // });
-    const response2 = await fetch(
-      "http://localhost:8000/room/api/create_room/" + quizs[index]["slug"],
-      {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "token " + props.token,
-        },
-      }
-    );
-    // let data = await response.json()
-    let data2 = await response2.json();
-    navigate("/room", {
-      state: {
-        // question_info: data,
-        quiz_info: data2,
-        /*
-        pin:
-        token_host:
-        title:
-        description:
-        list_question:
-        list_option:
-      */
-        my_token: props.token,
-      },
-    });
+    // const response2 = await fetch(
+    //   "http://localhost:8000/room/api/create_room/" + quizs[index]["slug"],
+    //   {
+    //     method: "GET", // *GET, POST, PUT, DELETE, etc.
+    //     mode: "cors", // no-cors, *cors, same-origin
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "token " + props.token,
+    //     },
+    //   }
+    // );
+    // // let data = await response.json()
+    // let data2 = await response2.json();
+    // navigate("/room", {
+    //   state: {
+    //     // question_info: data,
+    //     quiz_info: data2,
+    //     /*
+    //     pin:
+    //     token_host:
+    //     title:
+    //     description:
+    //     list_question:
+    //     list_option:
+    //   */
+    //     my_token: props.token,
+    //   },
+    // });
   }
   return (
     <div className="blask-list">

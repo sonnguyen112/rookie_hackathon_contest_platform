@@ -2,13 +2,14 @@ package com.group10.contestPlatform.services.imlp;
 
 
 import com.group10.contestPlatform.dtos.auth.ChangeProfileForm;
+import com.group10.contestPlatform.dtos.auth.TakeUserCheatedResponse;
 import com.group10.contestPlatform.dtos.auth.UserResponse;
-import com.group10.contestPlatform.entities.Role;
-import com.group10.contestPlatform.entities.User;
+import com.group10.contestPlatform.entities.*;
 import com.group10.contestPlatform.exceptions.DataNotFoundException;
 import com.group10.contestPlatform.exceptions.ExpiredTokenException;
 import com.group10.contestPlatform.exceptions.LocalizationUtils;
 import com.group10.contestPlatform.repositories.RoleRepository;
+import com.group10.contestPlatform.repositories.TakeRepository;
 import com.group10.contestPlatform.repositories.UserRepository;
 import com.group10.contestPlatform.security.jwt.JWTUtils;
 import com.group10.contestPlatform.services.IUserService;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import paging.PagingAndSortingHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,9 @@ public class UserService implements IUserService {
 
 	@Autowired
 	RoleRepository roleRepository;
+
+	@Autowired
+	TakeRepository takeRepository;
 
 	@Override
 	public Boolean existsByUsername(String username) {
@@ -182,27 +187,54 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId) {
+	public UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId, Integer userCheated) {
 		UserResponse result = new UserResponse();
 		Pageable pageable = helper.createPageable(USERS_PER_PAGE, pageNum);
 		String keyword = helper.getKeyword();
 		Page<User> page = null;
 
+//		if (keyword != null && !keyword.isEmpty()) {
+//
+//			if (roleId != null) {
+//
+//				page = userRepository.searchByRoleAndKeyword(roleId, keyword, pageable);
+//			} else {
+//				page = userRepository.findAll(keyword, pageable);
+//			}
+//		} else {
+//			if (roleId != null ) {
+//
+//				page = userRepository.fillByRole(roleId, pageable);
+//			} else {
+//				page = userRepository.findAll(pageable);
+//			}
+//		}
 		if (keyword != null && !keyword.isEmpty()) {
+			if (roleId != null && userCheated != null && userCheated == 10) {
 
-			if (roleId != null) {
+				page = userRepository.searchByRoleAndKeywordAndUserCheated(roleId, keyword, pageable);
+			} else if (roleId != null) {
 
 				page = userRepository.searchByRoleAndKeyword(roleId, keyword, pageable);
+			} else if (userCheated != null && userCheated == 10) {
+
+				page = userRepository.getAllUsersCheatedWithKeyword(keyword, pageable);
 			} else {
+
 				page = userRepository.findAll(keyword, pageable);
 			}
-		} else {
-			if (roleId != null ) {
+		} else if (roleId != null && userCheated != null && userCheated == 10) {
 
-				page = userRepository.fillByRole(roleId, pageable);
-			} else {
-				page = userRepository.findAll(pageable);
-			}
+			page = userRepository.getAllUsersCheatedWithRole(roleId, pageable);
+		} else if (roleId != null) {
+
+			page = userRepository.fillByRole(roleId, pageable);
+		} else if (userCheated != null && userCheated == 10) {
+
+			page = userRepository.getAllUsersCheated(pageable);
+		} else {
+
+			page = userRepository.findAll(pageable);
 		}
 
 		helper.updateModelAttributes(pageNum, page,result);
@@ -246,6 +278,8 @@ public class UserService implements IUserService {
 		existingUser.setRole(role);
 		return userRepository.save(existingUser);
 	}
+
+
 
 
 }

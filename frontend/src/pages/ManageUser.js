@@ -6,6 +6,7 @@ import ModelDeleteUser from "./ModelDeleteUser";
 import TableUserPaginate from "./TableUserPaginate";
 import { toast } from "react-toastify";
 import { getUserWithPaginate } from "../services/apiService";
+import ModelDetailUserCheated from "./ModelDetailUserCheated";
 
 
 const ManageUser = (props) => {
@@ -14,8 +15,10 @@ const ManageUser = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
+  const [selectedUserCheated, setSelectedUserCheated] = useState('');
   const [showModelCreateUser, setShowModelCreateUser] = useState(false);
   const [showModalUpdateUser, setShowModalUpdateUser] = useState(false);
+  const [showModalDetailUser, setShowModalDetailUser] = useState(false);
   const [dataUpdate, setDataUpdate] = useState({});
   const [showModelDeleteUser, setShowModelDeleteUser] = useState(false);
   const [dataDelete, setDataDelete] = useState({});
@@ -28,11 +31,24 @@ const ManageUser = (props) => {
 
   const handleSelectedRoleChange = (e) => {
     const value = e.target.value;
-    setSelectedRole(value);
+
+    if(value == 10){
+      setSelectedUserCheated(value)
+    }else{
+      console.log(value)
+      setSelectedRole(value);
+      setSelectedUserCheated('');
+    }
+   
+ 
   };
 
   const handleClickBtnUpdate = (user) => {
     setShowModalUpdateUser(true);
+    setDataUpdate(user);
+  };
+  const handleClickBtnDetail = (user) => {
+    setShowModalDetailUser(true);
     setDataUpdate(user);
   };
 
@@ -45,11 +61,11 @@ const ManageUser = (props) => {
     setDataUpdate({});
   };
 
-  const fetchListUsers = async (page, searchTerm, role) => {
+  const fetchListUsers = async (page, searchTerm, role,UserCheated) => {
   
     try {
-      const res = await getUserWithPaginate(page, searchTerm, role);
-      console.log("res",res)
+      const res = await getUserWithPaginate(page, searchTerm, role,UserCheated);
+    
       if (res) {
         setListUsers(res.listName);
         setPageCount(res.totalPages);
@@ -58,17 +74,17 @@ const ManageUser = (props) => {
       }
     } catch (error) {
       console.error('Error fetching user list:', error);
-      toast.error("Failed to fetch user list");
+    
     }
   };
 
   useEffect(() => {
-    fetchListUsers(currentPage, '', ''); // Initial fetch without search term or role
+    fetchListUsers(currentPage, '', '','');
   }, []);
 
   useEffect(() => {
-    fetchListUsers(currentPage, searchTerm, selectedRole);
-  }, [currentPage, searchTerm, selectedRole]);
+    fetchListUsers(currentPage, searchTerm, selectedRole,selectedUserCheated);
+  }, [currentPage, searchTerm, selectedRole,selectedUserCheated]);
 
 
 
@@ -99,6 +115,7 @@ const ManageUser = (props) => {
               <option value="">All Roles</option>
               <option value="1">Admin</option>
               <option value="2">User</option>
+              <option value="10">Users Cheated</option>
             </select>
           </div>
         </div>
@@ -108,6 +125,7 @@ const ManageUser = (props) => {
             listUsers={listUsers}
             handleClickBtnUpdate={handleClickBtnUpdate}
             handleClickBtnDelete={handleClickBtnDelete}
+            handleClickBtnDetail={handleClickBtnDetail}
             fetchListUsersWithPaginate={fetchListUsers}
             pageCount={pageCount}
             currentPage={currentPage}
@@ -124,6 +142,14 @@ const ManageUser = (props) => {
         <ModelUpdateUser
           show={showModalUpdateUser}
           setShow={setShowModalUpdateUser}
+          dataUpdate={dataUpdate}
+          fetchListUsersWithPaginate={fetchListUsers}
+          currentPage={setCurrentPage}
+          resetUpdateData={resetUpdateData}
+        />
+           <ModelDetailUserCheated
+          show={showModalDetailUser}
+          setShow={setShowModalDetailUser}
           dataUpdate={dataUpdate}
           fetchListUsersWithPaginate={fetchListUsers}
           currentPage={setCurrentPage}

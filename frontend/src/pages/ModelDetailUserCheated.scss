@@ -1,0 +1,45 @@
+.image-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .img-thumbnail {
+    width: 100px; 
+    height: 100px; 
+    object-fit: cover;
+    margin: 5px; 
+    border-radius: 8px; 
+  }
+  .quiz-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .image-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .img-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 8px;
+  }
+  
+  .send-email-button {
+    background-color: #007bff; /* Primary color, you can change this to your desired color */
+    color: #ffffff; /* Text color, you can change this to your desired color */
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .send-email-button:hover {
+    background-color: #0056b3; /* Change the hover color as needed */
+  }
+  
+  

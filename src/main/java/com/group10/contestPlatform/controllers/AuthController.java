@@ -11,6 +11,7 @@ import com.group10.contestPlatform.exceptions.LocalizationUtils;
 import com.group10.contestPlatform.security.jwt.JWTUtils;
 import com.group10.contestPlatform.services.IRoleService;
 import com.group10.contestPlatform.services.IUserService;
+import com.group10.contestPlatform.services.imlp.ITakeService;
 import com.group10.contestPlatform.services.imlp.SettingService;
 import com.group10.contestPlatform.utils.CustomerForgetPasswordUtil;
 import com.group10.contestPlatform.utils.CustomerRegisterUtil;
@@ -64,7 +65,8 @@ public class AuthController {
 	@Autowired
 	IUserService userService;
 
-
+	@Autowired
+	ITakeService takeService;
 
 	@Autowired
 	IRoleService roleService;
@@ -79,10 +81,11 @@ public class AuthController {
 	public ResponseEntity<?> showListUser(
 			@PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
 			 @PathVariable(name = "pageNum") int pageNum,
-			@RequestParam(value = "roleId", required = false) Integer roleId
+			@RequestParam(value = "roleId", required = false) Integer roleId,
+			@RequestParam(value = "userCheated", required = false) Integer userCheated
 	) {
 
-		UserResponse result = userService.listByPage(pageNum, helper,roleId);
+		UserResponse result = userService.listByPage(pageNum, helper,roleId,userCheated);
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -203,6 +206,21 @@ public class AuthController {
 
 		return new ResponseEntity<>(new ResponMessage("200"), HttpStatus.OK);
 	}
+	@PostMapping(value = "/send_mail_user")
+	public ResponseEntity<?> sendMailUser(HttpServletRequest request,@Valid @RequestBody SendMailForm sendMailForm) throws Exception {
+
+
+		if (!userService.existsByEmail(sendMailForm.getEmail())) {
+			return new ResponseEntity<>(new ResponMessage("nouser"), HttpStatus.OK);
+		}
+//		String token = userService.updateResetPasswordToken(forgotPasswordForm.getEmail());
+//		String link = apiPrefix + "/reset_password?token=" + token;
+
+		CustomerForgetPasswordUtil.sendEmailUserCheat(sendMailForm.getEmail(), sendMailForm.getContent(), settingService);
+
+
+		return new ResponseEntity<>(new ResponMessage("200"), HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/reset_password")
 	public ResponseEntity<?> processResetPassword(@RequestParam(value = "token", required = true) String token,
@@ -211,5 +229,16 @@ public class AuthController {
 		userService.updatePassword(token, password);
 
 		return new ResponseEntity<>(new ResponMessage("200"), HttpStatus.OK);
+	}
+
+	@GetMapping("/detail_cheated/{userId}")
+	public ResponseEntity<UserTakeDetailsResponseDTO> getTakeDetails(@PathVariable Long userId) {
+		UserTakeDetailsResponseDTO  responseDTO = takeService.getTakeDetails(userId);
+
+		if (responseDTO != null) {
+			return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 }

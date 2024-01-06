@@ -18,11 +18,11 @@ const ModelCreateUser = (props) => {
 
     setRole("2");
   };
-  // const validateEmail = (email) => {
-  //   return email.match(
-  //     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  //   );
-  // };
+  const validateEmail = (email) => {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +37,12 @@ const ModelCreateUser = (props) => {
   };
 
   const handleSubmitCreateUser = async () => {
-    console.log(role)
+   
+    const isValiEmail = validateEmail(email);
+    if (!isValiEmail) {
+      toast.error("Invalid email");
+      return;
+    }
     try {
       const data = await postCreateNewUser(
         email,

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
@@ -28,5 +29,37 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT u FROM User u WHERE u.role.id = :roleId")
 	public Page<User> fillByRole(@Param("roleId") Integer roleId, Pageable pageable);
+
+	@Query("SELECT DISTINCT u FROM User u " +
+			"JOIN u.takes t " +
+			"WHERE t.cheat = true")
+	Page<User> getAllUsersCheated(Pageable pageable);
+
+
+	@Query("SELECT DISTINCT u FROM User u " +
+			"JOIN u.takes t " +
+
+			"WHERE u.role.id = :roleId " +
+			"AND LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+			"AND t.cheat = true")
+	Page<User> searchByRoleAndKeywordAndUserCheated(
+			@Param("roleId") Integer roleId,
+			@Param("keyword") String keyword,
+			Pageable pageable);
+
+	@Query("SELECT DISTINCT u FROM User u " +
+			"JOIN u.takes t " +
+			"WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+			"AND t.cheat = true")
+	Page<User> getAllUsersCheatedWithKeyword(
+			@Param("keyword") String keyword,
+			Pageable pageable);
+	@Query("SELECT DISTINCT u FROM User u " +
+			"JOIN u.takes t " +
+			"WHERE u.role.id = :roleId " +
+			"AND t.cheat = true")
+	Page<User> getAllUsersCheatedWithRole(
+			@Param("roleId") Integer roleId,
+			Pageable pageable);
 
 }

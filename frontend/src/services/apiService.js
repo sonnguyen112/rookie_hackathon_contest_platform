@@ -15,7 +15,7 @@ const postCreateNewUser = (email, password, username, firstName,lastName, role, 
 const getAllusers = () => {
   return axios.get("api/auth/user");
 };
-const getUserWithPaginate = (page, searchTerm, selectedRole) => {
+const getUserWithPaginate = (page, searchTerm, selectedRole,UserCheated) => {
 
   let apiUrl = `api/auth/users/page/${page}?sortField=firstName&sortDir=asc`;
 
@@ -27,7 +27,10 @@ const getUserWithPaginate = (page, searchTerm, selectedRole) => {
   if (selectedRole) {
     apiUrl += `&roleId=${selectedRole}`;
   }
-
+  if (UserCheated) {
+    apiUrl += `&userCheated=${UserCheated}`;
+  }
+  console.log(apiUrl)
 
   return axios.get(apiUrl);
 };
@@ -71,6 +74,9 @@ const postLogin = (username, password) => {
 };
 const postForgotPassword = (email) => {
   return axios.post("api/auth/forgot_password", { email });
+};
+const sendMailUser = (email,content) => {
+  return axios.post("api/auth/send_mail_user", { email,content });
 };
 const postResetPassword = (token,password) => {
   return axios.post(`api/auth/reset_password?token=${token}&password=${password}`, );
@@ -146,6 +152,11 @@ const getQuizWithQA = (quiz_id) => {
   return axios.post(`api/quiz/${quiz_id}`,);
 };
 
+const getUserDetailCheated = (userId) => {
+
+  return axios.get(`api/auth/detail_cheated/${userId}`,);
+};
+
 const postUpdateQA = (data) => {
 
   return axios.post(`api/questions/upsert`, data);
@@ -187,4 +198,6 @@ export {
   postUpdateQA,
   logout,
   getOverview,
+  getUserDetailCheated,
+  sendMailUser,
 };

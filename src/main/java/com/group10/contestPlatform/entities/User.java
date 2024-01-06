@@ -41,12 +41,9 @@ public class User implements UserDetails{
     private Timestamp registerAt;
     private Timestamp lastLogin;
 
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
-
 
     @OneToMany(mappedBy = "host")
     private Set<Quiz> createdQuizzes;

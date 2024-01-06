@@ -1,6 +1,7 @@
 package com.group10.contestPlatform.services;
 
 import com.group10.contestPlatform.dtos.auth.ChangeProfileForm;
+import com.group10.contestPlatform.dtos.auth.TakeUserCheatedResponse;
 import com.group10.contestPlatform.dtos.auth.UserResponse;
 import com.group10.contestPlatform.entities.User;
 
@@ -31,7 +32,9 @@ public interface IUserService {
 
     void updatePassword(String token, String password) throws Exception;
 
-	UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId);
+	UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId, Integer userCheated);
 
 	User updateUser(Long id, ChangeProfileForm changeProfileForm) throws Exception;
+
+
 }

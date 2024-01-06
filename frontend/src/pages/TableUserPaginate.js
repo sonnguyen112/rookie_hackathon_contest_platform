@@ -38,6 +38,16 @@ const TableUserPaginate = (props) => {
             
             <button
          style={{ marginRight: '20px' }}
+              className="btn btn-success btn-sm mr-6"
+              onClick={() => props.handleClickBtnDetail(item)}
+              title=" View Detail"
+            >
+              <i className="fas fa-edit"></i>
+              View Detail
+            </button>
+
+            <button
+         style={{ marginRight: '20px' }}
               className="btn btn-warning btn-sm mr-6"
               onClick={() => props.handleClickBtnUpdate(item)}
               title="Update"
