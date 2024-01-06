@@ -1,12 +1,8 @@
 package com.group10.contestPlatform.controllers;
 
-import com.amazonaws.services.apigateway.model.NotFoundException;
-import com.group10.contestPlatform.dtos.quiz.usersubmitanswer.QuizQuestionQuery;
 import com.group10.contestPlatform.dtos.quiz.usersubmitanswer.UserSubmitAnswerRequest;
 import com.group10.contestPlatform.dtos.quiz.usersubmitanswer.UserSubmitAnswerResponse;
-import com.group10.contestPlatform.entities.Question;
 import com.group10.contestPlatform.exceptions.DataNotFoundException;
-import com.group10.contestPlatform.services.ISubmitAnswerService;
 import com.group10.contestPlatform.services.imlp.SubmitAnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +23,9 @@ public class UserSubmitAnswerController {
 
         try {
             UserSubmitAnswerResponse response = submitAnswerService.response(submitAnswerRequests, quizId);
+            submitAnswerService.saveToTakeAnswerTable(submitAnswerRequests, quizId);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }

@@ -52,8 +52,10 @@ public class Take {
 
     @OneToMany(mappedBy = "take")
     private List<TakeAnswer> takeAnswers;
+
     @Builder.Default
     private Boolean cheat = false;
+
     @OneToMany(mappedBy = "take")
     private List<CheatInfo> cheatInfos;
 }

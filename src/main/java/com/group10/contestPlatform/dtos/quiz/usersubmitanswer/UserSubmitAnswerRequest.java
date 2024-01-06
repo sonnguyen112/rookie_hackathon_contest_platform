@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSubmitAnswerRequest {
-    private int quizQuestion;
-    private int selectedAnswer;
+    private long quizQuestion;
+    private long selectedAnswer;
 }

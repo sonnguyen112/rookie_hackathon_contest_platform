@@ -1,16 +1,11 @@
 package com.group10.contestPlatform.services.imlp;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.group10.contestPlatform.dtos.quiz.usersubmitanswer.*;
-import com.group10.contestPlatform.entities.Question;
-import com.group10.contestPlatform.entities.Take;
-import com.group10.contestPlatform.entities.User;
+import com.group10.contestPlatform.entities.*;
+import com.group10.contestPlatform.exceptions.AppException;
 import com.group10.contestPlatform.exceptions.DataNotFoundException;
-import com.group10.contestPlatform.exceptions.LocalizationUtils;
-import com.group10.contestPlatform.repositories.ISubmitAnswerRepository;
-import com.group10.contestPlatform.repositories.UserRepository;
+import com.group10.contestPlatform.repositories.*;
 import com.group10.contestPlatform.services.ISubmitAnswerService;
-import com.group10.contestPlatform.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,30 +15,41 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SubmitAnswerService implements ISubmitAnswerService {
     @Autowired
-    private ISubmitAnswerRepository submitAnswerRepository;
-    private final UserRepository userRepository;
+    private SubmitAnswerRepository submitAnswerRepository;
+
+    private final UserRepository userRepository; // for finding user by id
+    private final QuizRepository quizRepository; // for finding quiz by id
+    private final TakeRepository takeRepository; // for saving to take table
+    private final AnswerRepository quizAnswerRepository; // for finding quiz_answer by id
+    private final QuestionRepository quizQuestionRepository; // for finding quiz_question by id
+    private final TakeAnswerRepository takeAnswerRepository; // for saving to take_answer table
+
     private Float score = 0.0f;
     private int correctQuestions = 0;
 
-    @Override
+
+    // method
+
     public List<QuizQuestionQuery> findQuizQuestionsByQuizId(long quizId) {
         return submitAnswerRepository.findByQuizId(quizId);
     }
 
-    @Override
+
     public QuizAnswerQuery findAnswerById(long id) {
         return submitAnswerRepository.findById(id);
     }
 
     // this method must run after calScore method to have the score
     @Override
-    public void saveToTakeAnswerTable(long quizId, long id) {
+    public void saveToTakeAnswerTable(List<UserSubmitAnswerRequest> submitAnswerRequests, long quizId) {
         try {
+            // save to take table
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentPrincipalName = authentication.getName();
 
@@ -56,29 +62,54 @@ public class SubmitAnswerService implements ISubmitAnswerService {
             newTake.setFinishedAt(new Timestamp(System.currentTimeMillis()));
             newTake.setPushlished(true);
             newTake.setScore(score);
+            newTake.setUser(testUser);
 
+            // find quiz by id and add to newTake
+            Optional<Quiz> quizOptional = quizRepository.findById(quizId);
+            if (quizOptional.isPresent()) {
+                Quiz quiz = quizOptional.get();
+                newTake.setQuiz(quiz);
+            }
+
+            takeRepository.save(newTake);
+
+            for (UserSubmitAnswerRequest request : submitAnswerRequests) {
+                TakeAnswer newTakeAnswer = new TakeAnswer();
+                Optional<Question> quizQuestionOptional = quizQuestionRepository.findById(request.getQuizQuestion());
+                Optional<Answer> quizAnswerOptional = quizAnswerRepository.findById(request.getSelectedAnswer());
+
+                // check if quizQuestion or quizAnswer null or not
+                if (quizQuestionOptional.isPresent()) {
+                    Question quizQuestion = quizQuestionOptional.get();
+                    newTakeAnswer.setQuestion(quizQuestion);
+                }
+                if (quizAnswerOptional.isPresent()) {
+                    Answer quizAnswer = quizAnswerOptional.get();
+                    newTakeAnswer.setContent(quizAnswer.getContent());
+                    newTakeAnswer.setAnswer(quizAnswer);
+                }
+                newTakeAnswer.setTake(newTake);
+
+                takeAnswerRepository.save(newTakeAnswer);
+            }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
+            throw new AppException(400, 100);
         }
     }
 
     @Override
-    public void calScore(List<UserSubmitAnswerRequest> submitAnswerRequests, List<QuizQuestionQuery> questionQueries) {
-        score = 0.0f;
-        correctQuestions = 0;
-        //Iterate through each submitAnswerRequest to check if the answer is correct, if correct, add score to the user
-        for (UserSubmitAnswerRequest submit : submitAnswerRequests) {
-            QuizAnswerQuery answerQuery = findAnswerById(submit.getSelectedAnswer());
+    public void calScore(UserSubmitAnswerRequest request, List<QuizQuestionQuery> questionQueries) {
+            QuizAnswerQuery answerQuery = findAnswerById(request.getSelectedAnswer());
 
             if (answerQuery != null && answerQuery.getCorrect()) {
-                QuizQuestionQuery quizQuestionQuery = findQuizInListById(questionQueries, submit.getQuizQuestion());
+                QuizQuestionQuery quizQuestionQuery = findQuizInListById(questionQueries, request.getQuizQuestion());
                 if (quizQuestionQuery != null) {
                     score += quizQuestionQuery.getScore();
                     correctQuestions++;
                 }
             }
-        }
     }
 
     @Override
@@ -92,20 +123,31 @@ public class SubmitAnswerService implements ISubmitAnswerService {
             throw new DataNotFoundException("Error: Does not found any question in this Quiz");
         }
 
-        // calculate the score
-        calScore(submitAnswerRequests, questionQueries);
-
         // set the totalQuestions, correctQuestions, score and init a list of listResult
         UserSubmitAnswerResponse newResponse = new UserSubmitAnswerResponse();
         newResponse.setTotalQuestions(submitAnswerRequests.size());
-        newResponse.setCorrectQuestions(correctQuestions);
+        // add listResult to response
+        newResponse.setListResult(takeListResult(submitAnswerRequests, questionQueries));
         newResponse.setScore(score);
+        newResponse.setCorrectQuestions(correctQuestions);
+
+        return newResponse;
+    }
+
+    public List<UserSubmitAnswerListResultResponse> takeListResult (List<UserSubmitAnswerRequest> submitAnswerRequests,
+                                                                    List<QuizQuestionQuery> questionQueries)
+                                                                    throws DataNotFoundException {
+        score = 0.0f;
+        correctQuestions = 0;
 
         // init listResult
         List<UserSubmitAnswerListResultResponse> listResultResponses = new ArrayList<>();
 
         // Iterate through each submitAnswerRequest to retrieve information and save it into the listResultResponses.
         for (UserSubmitAnswerRequest request : submitAnswerRequests) {
+            // calculate the score
+            calScore(request, questionQueries);
+
             // init new result
             UserSubmitAnswerListResultResponse newResultResponse = new UserSubmitAnswerListResultResponse();
 
@@ -146,10 +188,7 @@ public class SubmitAnswerService implements ISubmitAnswerService {
             listResultResponses.add(newResultResponse);
         }
 
-        // add listResult to response
-        newResponse.setListResult(listResultResponses);
-
-        return newResponse;
+        return listResultResponses;
     }
 
     public QuizQuestionQuery findQuizInListById (List<QuizQuestionQuery> questionQueries, long id) {

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 // Question for quiz_question table
-public interface ISubmitAnswerRepository extends JpaRepository<Question, Long> {
+public interface SubmitAnswerRepository extends JpaRepository<Question, Long> {
     @Query("SELECT new com.group10.contestPlatform.dtos.quiz.usersubmitanswer.QuizQuestionQuery(q.id, q.imgURI,q.content, q.score) " +
             "FROM Question q WHERE q.quiz.id = :quizId")
     List<QuizQuestionQuery> findByQuizId(long quizId);
