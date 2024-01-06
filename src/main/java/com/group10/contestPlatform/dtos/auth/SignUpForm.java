@@ -27,10 +27,8 @@ public class SignUpForm {
 
 	@NotBlank(message = "Password cannot be blank")
 	private String password;
+
 	@NotNull(message = "Role ID is required")
 	@JsonProperty("role_id")
 	private Long roleId;
-
-
-
 }

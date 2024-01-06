@@ -26,22 +26,30 @@ public class Answer {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
+
     @ManyToOne()
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
+
     @Builder.Default
     private Boolean active = true;
+
     @Column(nullable = false)
     private Boolean correct;
+
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
     @Builder.Default
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
     @Column(nullable = false)
     private String content;
+
     @OneToMany(mappedBy = "answer")
     private List<TakeAnswer> takeAnswers;
 }
