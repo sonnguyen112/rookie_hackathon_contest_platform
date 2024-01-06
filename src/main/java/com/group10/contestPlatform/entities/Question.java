@@ -30,19 +30,26 @@ public class Question {
     // private String type;
     @Builder.Default
     private Boolean active = true;
+
     @Column(nullable = false)
     private Float score;
+
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
     @Builder.Default
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
     @Column(nullable = false)
     private String content;
+
     @ManyToOne()
     @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
+
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+
     @OneToMany(mappedBy = "question")
     private List<TakeAnswer> takeAnswers;
     private String imgURI;

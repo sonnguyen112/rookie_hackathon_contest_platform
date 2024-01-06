@@ -49,5 +49,4 @@ public class ContestPlatformApplication {
 			userRepository.save(admin);
 		};
 	}
-
 }

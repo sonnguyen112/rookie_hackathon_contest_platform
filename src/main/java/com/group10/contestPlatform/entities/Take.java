@@ -26,22 +26,30 @@ public class Take {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
+
     @Column(nullable = false)
     private Float score;
+
     @Builder.Default
     private Boolean pushlished = true;
+
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
     @Column(nullable = false)
     private Timestamp startedAt;
+
     @Column(nullable = false)
     private Timestamp finishedAt;
+
     @OneToMany(mappedBy = "take")
     private List<TakeAnswer> takeAnswers;
     @Builder.Default
