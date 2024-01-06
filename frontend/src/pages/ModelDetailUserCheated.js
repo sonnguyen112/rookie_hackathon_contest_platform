@@ -41,20 +41,21 @@ const ModelDetailUserCheated = (props) => {
 
     fetchData();
   }, [props.dataUpdate]);
-
+  console.log(takeDetails)
   const handleClose = () => {
     setShow(false);
     SetIdUser("");
     props.resetUpdateData();
   };
   const handleSendQuizToEmail = async() => {
-   
-    let response = await sendMailUser(dataUpdate.email,contentHTML);
+   console.log(dataUpdate.email,contentHTML)
+    // let response = await sendMailUser(dataUpdate.email,contentHTML);
   };
   let handleEditorChange = ({ html, text }) => {
     setContentHTML(html);
     setContentMarkdown(text);
   };
+ 
 
   return (
     <>
@@ -79,7 +80,7 @@ const ModelDetailUserCheated = (props) => {
           {takeDetails.map((takeDetail) => (
             <Card key={takeDetail.takeId} className="mt-3">
               <Card.Body>
-                <Card.Title>{takeDetail.quizTitle}</Card.Title>
+                <Card.Title>{takeDetail.quizTitle} {takeDetail.takeId}</Card.Title>
                 <div className="image-row">
                   {takeDetail.cheatInfoImgUrls.map((imgUrl, index) => (
                     <img
