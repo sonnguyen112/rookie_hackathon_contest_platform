@@ -1,23 +1,34 @@
 package com.group10.contestPlatform.services.imlp;
 
 
-import com.group10.contestPlatform.entities.User;
+import com.group10.contestPlatform.dtos.auth.ChangeProfileForm;
+import com.group10.contestPlatform.dtos.auth.TakeUserCheatedResponse;
+import com.group10.contestPlatform.dtos.auth.UserResponse;
+import com.group10.contestPlatform.entities.*;
 import com.group10.contestPlatform.exceptions.DataNotFoundException;
 import com.group10.contestPlatform.exceptions.ExpiredTokenException;
 import com.group10.contestPlatform.exceptions.LocalizationUtils;
+import com.group10.contestPlatform.repositories.RoleRepository;
+import com.group10.contestPlatform.repositories.TakeRepository;
 import com.group10.contestPlatform.repositories.UserRepository;
 import com.group10.contestPlatform.security.jwt.JWTUtils;
 import com.group10.contestPlatform.services.IUserService;
+import com.group10.contestPlatform.utils.CustomerRegisterUtil;
 import com.group10.contestPlatform.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import paging.PagingAndSortingHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +39,15 @@ public class UserService implements IUserService {
 	private final LocalizationUtils localizationUtils;
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtils jwtTokenUtil;
+	public static final int USERS_PER_PAGE = 4;
 	@Autowired
 	UserRepository userRepository;
 
-	
+	@Autowired
+	RoleRepository roleRepository;
+
+	@Autowired
+	TakeRepository takeRepository;
 
 	@Override
 	public Boolean existsByUsername(String username) {
@@ -49,7 +65,10 @@ public class UserService implements IUserService {
 	public User save(User user) {
 
 
-		return userRepository.save(user);
+		return (User) userRepository.save(user);
+
+
+
 	}
 
 	
@@ -80,9 +99,9 @@ public class UserService implements IUserService {
 
 	@Override
 	public double totalItem() {
-		return (int) userRepository.count();
-		
+		return 0;
 	}
+
 
 	@Override
 	public void update(User user) {
@@ -127,6 +146,21 @@ public class UserService implements IUserService {
 	}
 
 	@Override
+	public String updateResetPasswordToken(String email) throws Exception {
+		User customer = userRepository.findByEmail(email);
+		if (customer != null) {
+			String token = RandomString.make(30);
+
+			customer.setResetPasswordToken(token);
+			userRepository.save(customer);
+
+			return token;
+		} else {
+			throw new Exception("Could not find any customer with the email " + email);
+		}
+	}
+
+	@Override
 	public User getUserDetailsFromToken(String token) throws Exception {
 		if(jwtTokenUtil.isTokenExpired(token)) {
 			throw new ExpiredTokenException("Token is expired");
@@ -140,6 +174,115 @@ public class UserService implements IUserService {
 			throw new Exception("User not found");
 		}
 	}
+
+	@Override
+	public void updatePassword(String token, String newPassword) throws Exception {
+		User customer = userRepository.findByResetPasswordToken(token);
+		if (customer == null) {
+			throw new Exception("No customer found: invalid token");
+		}
+
+		customer.setPassword(newPassword);
+		customer.setResetPasswordToken(null);
+		CustomerRegisterUtil.encodePassword(customer, passwordEncoder);
+
+		userRepository.save(customer);
+	}
+
+	@Override
+	public UserResponse listByPage(int pageNum, PagingAndSortingHelper helper, Integer roleId, Integer userCheated) {
+		UserResponse result = new UserResponse();
+		Pageable pageable = helper.createPageable(USERS_PER_PAGE, pageNum);
+		String keyword = helper.getKeyword();
+		Page<User> page = null;
+
+//		if (keyword != null && !keyword.isEmpty()) {
+//
+//			if (roleId != null) {
+//
+//				page = userRepository.searchByRoleAndKeyword(roleId, keyword, pageable);
+//			} else {
+//				page = userRepository.findAll(keyword, pageable);
+//			}
+//		} else {
+//			if (roleId != null ) {
+//
+//				page = userRepository.fillByRole(roleId, pageable);
+//			} else {
+//				page = userRepository.findAll(pageable);
+//			}
+//		}
+		if (keyword != null && !keyword.isEmpty()) {
+			if (roleId != null && userCheated != null && userCheated == 10) {
+
+				page = userRepository.searchByRoleAndKeywordAndUserCheated(roleId, keyword, pageable);
+			} else if (roleId != null) {
+
+				page = userRepository.searchByRoleAndKeyword(roleId, keyword, pageable);
+			} else if (userCheated != null && userCheated == 10) {
+
+				page = userRepository.getAllUsersCheatedWithKeyword(keyword, pageable);
+			} else {
+
+				page = userRepository.findAll(keyword, pageable);
+			}
+		} else if (roleId != null && userCheated != null && userCheated == 10) {
+
+			page = userRepository.getAllUsersCheatedWithRole(roleId, pageable);
+		} else if (roleId != null) {
+
+			page = userRepository.fillByRole(roleId, pageable);
+		} else if (userCheated != null && userCheated == 10) {
+
+			page = userRepository.getAllUsersCheated(pageable);
+		} else {
+
+			page = userRepository.findAll(pageable);
+		}
+
+		helper.updateModelAttributes(pageNum, page,result);
+		return result;
+	}
+
+	@Override
+	public User updateUser(Long id, ChangeProfileForm changeProfileForm) throws Exception {
+		User existingUser = userRepository.findById(id)
+				.orElseThrow(() -> new DataNotFoundException("User not found"));
+		String newUserName = changeProfileForm.getUsername();
+		if (!existingUser.getUsername().equals(newUserName) &&
+				userRepository.existsByUsername(newUserName)) {
+			throw new DataIntegrityViolationException("Username already exists");
+		}
+		String newEmail = changeProfileForm.getEmail();
+		if (!existingUser.getEmail().equals(newEmail) &&
+				userRepository.existsByEmail(newEmail)) {
+			throw new DataIntegrityViolationException("NewEmail already exists");
+		}
+
+		if (changeProfileForm.getFirstName() != null) {
+			existingUser.setFirstName(changeProfileForm.getFirstName());
+		}
+		if (changeProfileForm.getLastName() != null) {
+			existingUser.setLastName(changeProfileForm.getLastName());
+		}
+		if (changeProfileForm.getPassword() != null
+				&& !changeProfileForm.getPassword().isEmpty()) {
+
+			String newPassword = changeProfileForm.getPassword();
+			String encodedPassword = passwordEncoder.encode(newPassword);
+			existingUser.setPassword(encodedPassword);
+		}else{
+			existingUser.setPassword(existingUser.getPassword());
+		}
+
+		Role role =roleRepository.findById(Long.valueOf(changeProfileForm.getRoleId()))
+				.orElseThrow(() -> new DataNotFoundException(
+						localizationUtils.getLocalizedMessage(MessageKeys.ROLE_DOES_NOT_EXISTS)));
+		existingUser.setRole(role);
+		return userRepository.save(existingUser);
+	}
+
+
 
 
 }

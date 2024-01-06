@@ -26,7 +26,7 @@ const QuizAnswer = (props) => {
         inputProps={{ maxLength: 100 }}
         placeholder={`Add answer ${props.id + 1}`}
         sx={{
-          color: props.options.content.trim() !== "" ? "#fff" : "#000",
+          color: props.options?.content.trim() !== "" ? "#fff" : "#000",
           width: "85%",
           height: "75px",
           padding: 1,

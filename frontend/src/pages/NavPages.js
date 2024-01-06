@@ -14,12 +14,20 @@ import Reports from "./Reports";
 import Signup from "./Signup";
 import NoPage from "./NoPage";
 import { useSelector } from "react-redux";
-
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
+import { useParams } from 'react-router-dom';
+import ManageUser from "./ManageUser";
+import PrivateRoute from "../routes/PrivateRoute";
 const NavPages = (props) => {
   const [height, setHeight] = React.useState(0);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const account = useSelector((state) => state.user.account);
-  console.log(account)
+  const ResetPasswordRoute = () => {
+    const { token } = useParams();
+  console.log(token)
+    return <ResetPassword token={token} />;
+  };
   return (
     <>
       <CssBaseline />
@@ -37,7 +45,7 @@ const NavPages = (props) => {
         <Route
           path="library"
           element={
-            account.access_token.trim() !== "" ? (
+            account.access_token !== "" ? (
               <Library profile={props.profile} token={account.access_token} />
             ) : (
               <Login
@@ -48,6 +56,12 @@ const NavPages = (props) => {
             )
           }
         />
+        <Route path="manage-users" element={
+        
+        <PrivateRoute>
+<ManageUser />
+        </PrivateRoute>
+        } />
 
         <Route path="signup" element={<Signup height={height} />} />
         <Route
@@ -60,10 +74,23 @@ const NavPages = (props) => {
             />
           }
         />
+           
+         <Route
+          path="forgot_password"
+          element={
+            <ForgotPassword
+              setToken={props.setToken}
+              setProfile={props.setProfile}
+              height={height}
+            />
+          }
+        />
+          <Route path="reset_password/*" element={<ResetPassword />} />
+        
         <Route
           path="profile"
           element={
-            account.access_token.trim() !== "" ? (
+            account.access_token !== "" ? (
               <Profile
                 profile={props.profile}
                 height={height}

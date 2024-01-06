@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetQuizResponse {
+    private Long id;
     private String title;
     private String avatar;
     private String slug;

@@ -27,31 +27,44 @@ public class Quiz {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "hostId", nullable = false)
     private User host;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private String slug;
+
     @Builder.Default
     private Boolean published = true;
+
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
     @Builder.Default
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
     @Builder.Default
     private Timestamp publishedAt = new Timestamp(System.currentTimeMillis());
+
     @Column(nullable = false)
     private Timestamp startAt;
+
     @Column(nullable = false)
     private Timestamp endAt;
     private String content;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Question> questions;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
+
     @OneToMany(mappedBy = "quiz")
     private List<Take> takes;
+
     private String imgURI;
 }

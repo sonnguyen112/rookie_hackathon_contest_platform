@@ -8,7 +8,7 @@ import com.group10.contestPlatform.entities.RoleEnum;
 import java.util.Optional;
 
 public interface IRoleService {
-	  Optional<Role> findByName(RoleEnum name);
+    Optional<Role> findByName(RoleEnum name);
 
     Optional<Role> findById(Long roleId);
 }
