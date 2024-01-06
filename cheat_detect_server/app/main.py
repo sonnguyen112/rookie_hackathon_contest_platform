@@ -5,6 +5,8 @@ import base64
 from PIL import Image
 from io import BytesIO
 from .utils import check_cheat_util
+import numpy as np
+import cv2
 
 app = FastAPI()
 
@@ -28,7 +30,8 @@ async def check_cheat(request: schemas.CheckCheatRequest):
     #Remove base64 header
     img_base64 = img_base64[img_base64.index("base64,") + 7:]
     img_bytes = base64.b64decode(img_base64)
-    img = Image.open(BytesIO(img_bytes))
+    np_data = np.frombuffer(img_bytes, np.uint8)
+    img = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
     is_cheat, type_cheat = check_cheat_util(img)
     return {
         "is_cheat": is_cheat,
