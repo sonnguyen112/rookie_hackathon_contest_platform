@@ -46,8 +46,10 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 import jakarta.validation.Valid;
+
 import paging.PagingAndSortingHelper;
 import paging.PagingAndSortingParam;
+
 
 @RequestMapping("api/auth")
 @RestController
@@ -65,8 +67,10 @@ public class AuthController {
 	@Autowired
 	IUserService userService;
 
+
 	@Autowired
 	ITakeService takeService;
+
 
 	@Autowired
 	IRoleService roleService;
@@ -115,14 +119,14 @@ public class AuthController {
 			return new ResponseEntity<>(new ResponMessage("nouser"), HttpStatus.OK);
 		}
 
-
 		User user = new User(signUpForm.getUsername(), signUpForm.getFirstName(), signUpForm.getEmail(),
 				signUpForm.getLastName(), passwordEncoder.encode(signUpForm.getPassword()));
 
-		Role role =roleService.findById(signUpForm.getRoleId())
+		Role role = roleService.findById(signUpForm.getRoleId())
 				.orElseThrow(() -> new DataNotFoundException(
 						localizationUtils.getLocalizedMessage(MessageKeys.ROLE_DOES_NOT_EXISTS)));
-		if(role.getName().toUpperCase().equals(Role.ADMIN)) {
+
+		if (role.getName().toUpperCase().equals(Role.ADMIN)) {
 			throw new Exception("Không được phép đăng ký tài khoản Admin");
 		}
 
@@ -167,7 +171,6 @@ public class AuthController {
 			String token = userService.login(
 					signInForm.getUsername(),
 					signInForm.getPassword()
-
 			);
 
 			User userDetail = userService.getUserDetailsFromToken(token);

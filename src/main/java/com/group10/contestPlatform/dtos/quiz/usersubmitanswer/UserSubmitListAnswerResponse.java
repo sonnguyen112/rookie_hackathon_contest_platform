@@ -1,4 +1,4 @@
-package com.group10.contestPlatform.dtos.quiz;
+package com.group10.contestPlatform.dtos.quiz.usersubmitanswer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetOneAnswerResponse {
-    private Long id; // Question id
+public class UserSubmitListAnswerResponse {
+    private long id;
     private String answerText;
-    private Boolean correct;
+    private boolean correct;
 }

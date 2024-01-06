@@ -83,7 +83,7 @@ const postResetPassword = (token,password) => {
 };
 const postSubmitQuiz = (quizId, data) => {
 
-  return axios.post(`api/v1/quiz/${quizId}`, data);
+  return axios.post(`api/v1/take/${quizId}`, data);
 };
 const postRegister = (fullname, username, email, avatar, password, roles) => {
   return axios.post("api/auth/signup", {

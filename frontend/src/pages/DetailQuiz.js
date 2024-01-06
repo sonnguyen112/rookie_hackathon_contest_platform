@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
-// import { getDataQuiz, postSubmitQuiz } from "../../services/apiService";
-
 import '../style/DetailQuiz.scss'
 import _ from 'lodash'
 
@@ -32,7 +30,7 @@ const DetailQuiz = () => {
   const videoStyle = {
     display: isVideoVisible ? 'block' : 'none',
   };
-  console.log(videoRef)
+
  
   useEffect(() => {
     const getImage = setInterval(() => {
@@ -44,7 +42,7 @@ const DetailQuiz = () => {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(videoRef.current, 0, 0);
         const dataURL = canvas.toDataURL('image/png');
-        console.log(dataURL);
+        // console.log(dataURL);
         // call post api with dataURL {"img": dataURL}
         
       }
@@ -63,7 +61,7 @@ const DetailQuiz = () => {
         console.log('Stream ended');
         stopCapture();
       };
-      console.log(displaySurface)
+
       if (displaySurface !== 'monitor') {
         // Ném ra lỗi để ngăn chặn chia sẻ màn hình
         toast.warning('Selection of entire screen mandatory!');
@@ -72,17 +70,17 @@ const DetailQuiz = () => {
       }
   
       setStream(displayStream);
-      console.log(displayStream);
+   
       videoRef.current.srcObject = displayStream;
   
       setShowModelConfirm(false);
   
       setText('Yes');
     } catch (err) {
-      console.error(err);
+
     }
   };
-  console.log(videoRef);
+
   
 
 
@@ -90,11 +88,11 @@ const DetailQuiz = () => {
     const shouldStop = window.confirm('Are you sure you want to stop capture? End Submit Quiz Contenst');
       
     if (!shouldStop) {
-      console.log(1)
+  
       return;
    
     }
-    console.log(2)
+   
     setShowModelConfirm(true);
     setText('No');
     
@@ -127,31 +125,31 @@ const DetailQuiz = () => {
 
   const fetchQuestions = async () => {
    
-    // let res = await getDataQuiz(quizId);
-    // let raw = res
+    let res = await getDataQuiz(quizId);
+    let raw = res
 
-    // let data = _.chain(raw)
-    //   .groupBy("id")
-    //   .map((value, key) => {
+    let data = _.chain(raw)
+      .groupBy("id")
+      .map((value, key) => {
 
         
-    //     let answers = [];
-    //     let questionDescription, image = null;
-    //     value.forEach((item, index) => {
+        let answers = [];
+        let questionDescription, image = null;
+        value.forEach((item, index) => {
 
-    //       if (index === 0) {
-    //         questionDescription = item.text;
-    //         image = item.image
-    //       }
-    //       answers = item.answers.map(answer => ({ ...answer, isSelected: false, isCorrect: false }));
+          if (index === 0) {
+            questionDescription = item.text;
+            image = item.image
+          }
+          answers = item.answers.map(answer => ({ ...answer, isSelected: false, isCorrect: false }));
 
-    //       answers = _.orderBy(answers, ['id'], ['asc'])
-    //     })
-    //     return { questionId: key, answers, questionDescription, image }
-    //   })
-    //   .value()
+          answers = _.orderBy(answers, ['id'], ['asc'])
+        })
+        return { questionId: key, answers, questionDescription, image }
+      })
+      .value()
 
-    // setDataQuiz(data)
+    setDataQuiz(data)
 
   };
 
@@ -190,7 +188,7 @@ const DetailQuiz = () => {
 
 
   const handleFinishQuiz = async () => {
-    navigate("/");
+ 
     let payload = {};
     var answers = [];
     if (dataQuiz && dataQuiz.length > 0) {
@@ -212,55 +210,55 @@ const DetailQuiz = () => {
 
       })
       payload = answers;
-      
-      // let res = await postSubmitQuiz(+quizId, answers);
-
-      // if (res) {
+    
+      let res = await postSubmitQuiz(+quizId, answers);
+      console.log("res",res)
+      if (res) {
        
-      //   setIsSubtmitQuiz(true)
-      //   setDataModalResult({
-      //     correctQuestions: res?.correctQuestions,
-      //     totalQuestions: res?.totalQuestions,
+        setIsSubtmitQuiz(true)
+        setDataModalResult({
+          correctQuestions: res?.correctQuestions,
+          totalQuestions: res?.totalQuestions,
      
-      //   })
-      //   setIsShowModalResult(true)
+        })
+        setIsShowModalResult(true)
 
-      //   if (res && res.listResult) {
+        if (res && res.listResult) {
 
-      //     let dataQuizClone = _.cloneDeep(dataQuiz);
+          let dataQuizClone = _.cloneDeep(dataQuiz);
 
-      //     let a = res.listResult;
+          let a = res.listResult;
 
-      //     for (let q of a) {
+          for (let q of a) {
 
-      //       for (let i = 0; i < dataQuizClone.length; i++) {
+            for (let i = 0; i < dataQuizClone.length; i++) {
 
-      //         if (+q.id === +dataQuizClone[i].questionId) {
-      //           // UpdateAnswer
-      //           let newAnswers = [];
-      //           for (let j = 0; j < dataQuizClone[i].answers.length; j++) {
+              if (+q.id === +dataQuizClone[i].questionId) {
+                // UpdateAnswer
+                let newAnswers = [];
+                for (let j = 0; j < dataQuizClone[i].answers.length; j++) {
 
-      //             let s = q.answers.find(item => +item.id === +dataQuizClone[i].answers[j].id)
+                  let s = q.answers.find(item => +item.id === +dataQuizClone[i].answers[j].id)
 
 
-      //             if (s) {
+                  if (s) {
 
-      //               dataQuizClone[i].answers[j].isCorrect = true;
+                    dataQuizClone[i].answers[j].isCorrect = true;
 
-      //             }
+                  }
 
-      //             newAnswers.push(dataQuizClone[i].answers[j])
-      //           }
-      //           dataQuizClone[i].answers = newAnswers;
-      //         }
+                  newAnswers.push(dataQuizClone[i].answers[j])
+                }
+                dataQuizClone[i].answers = newAnswers;
+              }
 
-      //       }
-      //     }
-      //     setDataQuiz(dataQuizClone)
-      //   }
-      // } else {
-      //   alert("Wrong")
-      // }
+            }
+          }
+          setDataQuiz(dataQuizClone)
+        }
+      } else {
+        alert("Wrong")
+      }
     }
   }
   const handlePrev = () => {

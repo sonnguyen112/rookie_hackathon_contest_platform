@@ -26,21 +26,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@RequestMapping("api")
 @RestController
+@RequestMapping("api")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class TestController {
-
-	
 	@GetMapping(value = "/test")
-	public ResponseEntity<?> logoutPage(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-
-
+	public ResponseEntity<?> logoutPage() {
 		return new ResponseEntity<>(new ResponMessage("Hello"), HttpStatus.OK);
 	}
-	
-
-
 }

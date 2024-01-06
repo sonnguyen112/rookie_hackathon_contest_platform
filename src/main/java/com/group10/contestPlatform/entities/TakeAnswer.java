@@ -23,20 +23,27 @@ public class TakeAnswer {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "takeId", nullable = false)
     private Take take;
+
     @ManyToOne
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
+
     @ManyToOne
     @JoinColumn(name = "answerId", nullable = false)
     private Answer answer;
+
     @Builder.Default
     private Boolean active = true;
+
     @Builder.Default
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
     @Builder.Default
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
     private String content;
 }
