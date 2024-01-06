@@ -32,12 +32,13 @@ public class ContestPlatformApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner() {
 		return args -> {
-			try{
+			try {
 				Role adminRole = new Role();
 				adminRole.setName("ADMIN");
 				Role userRole = new Role();
 				userRole.setName("USER");
 				roleRepository.saveAll(List.of(adminRole, userRole));
+
 				User admin = User.builder().username("admin")
 						.password(passwordEncoder.encode("admin"))
 						.role(adminRole)
@@ -47,8 +48,8 @@ public class ContestPlatformApplication {
 						.build();
 
 				userRepository.save(admin);
-			}catch (Exception ex){
-
+			} catch (Exception e) {
+				e.getStackTrace();
 			}
 
 		};

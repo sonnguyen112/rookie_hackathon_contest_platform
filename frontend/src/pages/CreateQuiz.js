@@ -69,7 +69,7 @@ const CreateQuiz = (props) => {
 
             var optionsTmp = [];
             opt.map((o) => {
-              optionsTmp.push({ content: o.content, is_true: o.is_true });
+              optionsTmp.push({ content: o.answerText, is_true: o.correct });
             });
             while (optionsTmp.length < 4) {
               optionsTmp.push({ content: "", is_true: false });
@@ -84,7 +84,6 @@ const CreateQuiz = (props) => {
           }
         });
       }
-
       setQuestion(ques);
       setSlug(location.state.slug);
       setImgQuiz(location.state.quiz.imageQuizUrl);

@@ -130,7 +130,7 @@ const ToolBar = (props) => {
 
         </Box>
         <Box sx={{ flexGrow: 0 }}>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               display: { xs: "none", md: "inline" },
@@ -140,7 +140,7 @@ const ToolBar = (props) => {
             }}
           >
             Exit
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             color="secondary"

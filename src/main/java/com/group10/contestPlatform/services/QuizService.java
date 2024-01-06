@@ -57,43 +57,6 @@ public class QuizService {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentPrincipalName = authentication.getName();
-
-            User testUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
-
-            Quiz newQuiz = new Quiz();
-            newQuiz.setTitle(createQuizRequest.getTitle());
-            newQuiz.setContent(createQuizRequest.getDescription());
-            if (createQuizRequest.getImageQuizUrl() != null) {
-                newQuiz.setImgURI(amazonClient.uploadFile(createQuizRequest.getImageQuizUrl()));
-            } else {
-                newQuiz.setImgURI(urlDefautQuiz);
-            }
-            newQuiz.setStartAt(new Timestamp(Long.parseLong(createQuizRequest.getStartAt())));
-            newQuiz.setEndAt(new Timestamp(Long.parseLong(createQuizRequest.getEndAt())));
-            newQuiz.setHost(testUser);
-            newQuiz.setSlug(createQuizRequest.getTitle() + "-" + UUID.randomUUID().toString());
-            quizRepository.save(newQuiz);
-
-            for (CreateQuestionRequest question : createQuizRequest.getQuestions()) {
-                Question newQuestion = new Question();
-                newQuestion.setContent(question.getName());
-                newQuestion.setScore(question.getPoint());
-                if (question.getImageQuestionUrl() != null) {
-                    newQuestion.setImgURI(amazonClient.uploadFile(question.getImageQuestionUrl()));
-                } else {
-                    newQuestion.setImgURI(urlDefautQuiz);
-                }
-                newQuestion.setQuiz(newQuiz);
-                questionRepository.save(newQuestion);
-
-                for (CreateAnswerRequest answer : question.getOptions()) {
-                    Answer newAnswer = Answer.builder().content(answer.getContent()).correct(answer.getIs_true())
-                            .build();
-                    newAnswer.setQuestion(newQuestion);
-                    newAnswer.setQuiz(newQuiz);
-                    answerRepository.save(newAnswer);
-                }
-            }
             User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
             createQuizUtil(createQuizRequest, curUser);
 
