@@ -6,11 +6,13 @@ import lombok.Setter;
 
 @Setter @Getter
 // using for quiz_answer table
-public class QuizAnswerQuery {
+public class QuizCorrectAnswerQuery {
+    private Long id;
     private String content;
     private Boolean correct;
 
-    public QuizAnswerQuery(String content, Boolean correct) {
+    public QuizCorrectAnswerQuery(Long id, String content, Boolean correct) {
+        this.id = id;
         this.content = content;
         this.correct = correct;
     }
