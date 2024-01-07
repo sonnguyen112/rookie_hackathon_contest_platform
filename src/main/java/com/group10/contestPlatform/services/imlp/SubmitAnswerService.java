@@ -41,7 +41,7 @@ public class SubmitAnswerService implements ISubmitAnswerService {
     }
 
 
-    public QuizAnswerQuery findAnswerById(long id) {
+    public QuizCorrectAnswerQuery findAnswerById(long id) {
         return submitAnswerRepository.findById(id);
     }
 
@@ -100,10 +100,8 @@ public class SubmitAnswerService implements ISubmitAnswerService {
     }
 
     @Override
-    public void calScore(UserSubmitAnswerRequest request, List<QuizQuestionQuery> questionQueries) {
-            QuizAnswerQuery answerQuery = findAnswerById(request.getSelectedAnswer());
-
-            if (answerQuery != null && answerQuery.getCorrect()) {
+    public void calScore(Long correctAnswerId, UserSubmitAnswerRequest request, List<QuizQuestionQuery> questionQueries) {
+            if (correctAnswerId == request.getSelectedAnswer()) {
                 QuizQuestionQuery quizQuestionQuery = findQuizInListById(questionQueries, request.getQuizQuestion());
                 if (quizQuestionQuery != null) {
                     score += quizQuestionQuery.getScore();
@@ -145,9 +143,6 @@ public class SubmitAnswerService implements ISubmitAnswerService {
 
         // Iterate through each submitAnswerRequest to retrieve information and save it into the listResultResponses.
         for (UserSubmitAnswerRequest request : submitAnswerRequests) {
-            // calculate the score
-            calScore(request, questionQueries);
-
             // init new result
             UserSubmitAnswerListResultResponse newResultResponse = new UserSubmitAnswerListResultResponse();
 
@@ -167,14 +162,17 @@ public class SubmitAnswerService implements ISubmitAnswerService {
             // init new list answers
             List<UserSubmitListAnswerResponse> newListAnswerResponses = new ArrayList<>();
 
-            // query answer by id
-            QuizAnswerQuery answerQuery = findAnswerById(request.getSelectedAnswer());
+            // query answer by question id and true correct
+            QuizCorrectAnswerQuery answerQuery = findAnswerById(request.getQuizQuestion());
 
             if (answerQuery == null) {
                 throw new DataNotFoundException("Error: Does not found quiz answer");
             }
 
-            newAnswerResponse.setId(request.getSelectedAnswer());
+            // calculate the score
+            calScore(answerQuery.getId(), request, questionQueries);
+
+            newAnswerResponse.setId(answerQuery.getId());
             newAnswerResponse.setAnswerText(answerQuery.getContent());
             newAnswerResponse.setCorrect(answerQuery.getCorrect());
 
