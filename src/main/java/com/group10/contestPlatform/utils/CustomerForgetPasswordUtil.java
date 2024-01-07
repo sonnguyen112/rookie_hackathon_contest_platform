@@ -20,28 +20,11 @@ public class CustomerForgetPasswordUtil {
 
 
         EmailSettingBag emailSettings = settingService.getEmailSettings();
-
-
-
         JavaMailSenderImpl mailSender = CustomerRegisterUtil.prepareMailSender(emailSettings);
-
-
 
         String toAddress = email;
         String subject = "BACKEND ROOKIE HACKATHON";
 
-//        String content = contentClient;
-
-        StringBuilder contentBuilder = new StringBuilder();
-        contentBuilder.append("<p>Hello Wellcome to ATC</p>")
-                .append(contentClient)
-                .append("<p>There are many images you cheated:</p>");
-        for (String imageName : imageArray) {
-            String imageUrl = generatePresignedUrl(imageName); // Replace with your method to generate pre-signed URLs
-            contentBuilder.append("<img src='").append(imageUrl).append("'/>");
-        }
-
-        String content = contentBuilder.toString();
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
 
@@ -49,30 +32,13 @@ public class CustomerForgetPasswordUtil {
         helper.setTo(toAddress);
         helper.setSubject(subject);
 
-        helper.setText(content, true);
-
-
+        for (String imageUrl : imageArray) {
+           helper.setText("<p>Hello Welcome to ATC</p>" + contentClient + "<img src='" + imageUrl + "' style='max-width: 100%; height: auto;' /><br/>", true);
+        }
 
         mailSender.send(message);
     }
-    private static String generatePresignedUrl(String imageName) {
-        // Replace "your-bucket-name" and "your-object-key" with your S3 bucket name and object key
-        String bucketName = "your-bucket-name";
-        String objectKey = "your-object-key/" + imageName;
 
-        AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
-
-        // Set the expiration time for the pre-signed URL (e.g., 1 hour)
-        java.util.Date expiration = new java.util.Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 60; // 1 hour
-        expiration.setTime(expTimeMillis);
-
-        // Generate the pre-signed URL
-        URL url = s3Client.generatePresignedUrl(bucketName, objectKey, expiration, HttpMethod.GET);
-
-        return url.toString();
-    }
     public static void sendEmail(String link, String email, SettingService settingService)
             throws UnsupportedEncodingException, MessagingException {
 

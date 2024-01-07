@@ -65,17 +65,17 @@ export default function ForgotPassword(props) {
       };
   
       let response = await postForgotPassword(email);
-      console.log(response)
+      console.log(response.message)
       if (response.message == "200") {
         
         setLoading(false);
         toast.success("Please check your email")
    
-      } else if (response.message !== "200") {
+      } else if (response.message == "nouser") {
         setLoading(false);
     
   
-        toast.error(response)
+        toast.error("Email is not correct")
       }
     } catch (error) {
       console.error("Error during login:", error);

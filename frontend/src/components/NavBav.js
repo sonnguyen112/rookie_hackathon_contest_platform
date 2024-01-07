@@ -333,7 +333,7 @@ function ResponsiveAppBar(props) {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem
+                    {/* <MenuItem
                       component={Link}
                       to="profile"
                       key={settings[0]}
@@ -341,7 +341,7 @@ function ResponsiveAppBar(props) {
                     >
                       <AccountCircleIcon color="success" sx={{ mr: 1 }} />
                       <Typography textAlign="center">{settings[0]}</Typography>
-                    </MenuItem>
+                    </MenuItem> */}
                     <Divider />
                     <MenuItem key={settings[1]} onClick={handleClickOnUserMenu}>
                       <LogoutIcon sx={{ mr: 1, color: red[500] }} />

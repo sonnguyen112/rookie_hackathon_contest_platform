@@ -126,9 +126,9 @@ public class AuthController {
 				.orElseThrow(() -> new DataNotFoundException(
 						localizationUtils.getLocalizedMessage(MessageKeys.ROLE_DOES_NOT_EXISTS)));
 
-		if (role.getName().toUpperCase().equals(Role.ADMIN)) {
-			throw new Exception("Không được phép đăng ký tài khoản Admin");
-		}
+//		if (role.getName().toUpperCase().equals(Role.ADMIN)) {
+//			throw new Exception("Không được phép đăng ký tài khoản Admin");
+//		}
 
 		user.setRole(role);
 
@@ -241,4 +241,6 @@ public class AuthController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+
 }

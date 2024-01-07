@@ -13,6 +13,7 @@ import Question from "./Question";
 import RightCotent from "./RighContent";
 import ModelConfirmScreen from "./ModelConfirmScreen";
 import { toast } from "react-toastify";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const DetailQuiz = () => {
   const params = useParams();
@@ -28,7 +29,7 @@ const DetailQuiz = () => {
   const [dataModalResult, setDataModalResult] = useState({});
   let navigate = useNavigate();
   const [showModelConfirm, setShowModelConfirm] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   
   
 
@@ -206,7 +207,7 @@ const DetailQuiz = () => {
   };
 
   const handleFinishQuiz = async () => {
-  
+    setLoading(true);
     let payload = {};
     var answers = [];
     if (dataQuiz && dataQuiz.length > 0) {
@@ -232,7 +233,7 @@ const DetailQuiz = () => {
       };
       console.log(data);
       let res = await postSubmitQuiz(+quizId, data);
-      
+      setLoading(false);
    
       if (res) {
        
@@ -300,6 +301,13 @@ const DetailQuiz = () => {
 
   return (
     <>
+    <Backdrop
+  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={loading}
+
+>
+  <CircularProgress color="inherit" />
+</Backdrop>
       <video ref={videoRef} autoPlay style={videoStyle} />
       <div className="detail-quiz-container">
         <div className="left-content">
@@ -327,12 +335,8 @@ const DetailQuiz = () => {
               Next
             </button>
             <button
-              className="btn btn-warning"
-              disabled={isSubtmitQuiz}
-              onClick={() => handleFinishQuiz()}
-            >
-              Finish
-            </button>
+            disabled={isSubtmitQuiz}
+            className="btn btn-success" onClick={handleFinishQuiz}>Submit</button>
 
             <button
               className="btn btn-warning"
