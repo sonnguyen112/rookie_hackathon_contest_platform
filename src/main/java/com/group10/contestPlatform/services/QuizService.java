@@ -112,6 +112,7 @@ public class QuizService {
 
             // Take take = takeRepository.findByQuiz(quiz);
 
+
             if (!CollectionUtils.isEmpty(questions)) {
                 for (Question question : questions) {
                     GetQuestionResponse questionResponse = new GetQuestionResponse();
