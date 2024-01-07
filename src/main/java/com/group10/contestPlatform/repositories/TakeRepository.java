@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface TakeRepository extends JpaRepository<Take, Long> {
 
     List<Take> findByUserId(Long userId);
-    Optional<Take> findByQuiz(Quiz quiz);
+
     Optional<Take> findByUserAndQuiz(User user, Quiz quiz);
 }
 

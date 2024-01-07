@@ -3,6 +3,7 @@ package com.group10.contestPlatform.entities;
 import java.sql.Timestamp;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,6 +51,6 @@ public class Answer {
     @Column(nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
     private List<TakeAnswer> takeAnswers;
 }

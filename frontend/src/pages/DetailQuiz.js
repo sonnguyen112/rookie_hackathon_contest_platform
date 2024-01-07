@@ -126,6 +126,12 @@ const DetailQuiz = () => {
 
   const fetchQuestions = async () => {
     let res = await getDataQuiz(quizId);
+    console.log("data", res);
+    if (res.errCode === 14 || res.errCode === 15) {
+      toast.warning(res.message);
+      navigate("/library");
+      return
+    }
     let raw = res;
 
     let data = _.chain(raw)
