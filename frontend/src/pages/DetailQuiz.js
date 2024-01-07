@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 const DetailQuiz = () => {
   const params = useParams();
   const location = useLocation();
+  const quiz = location.state?.quiz;
+  // console.log("Quizzzz:",quiz.duration);
   const quizId = params.id;;
   const [dataQuiz, setDataQuiz] = useState([]);
   const [index, setIndex] = useState(0)
@@ -87,7 +89,7 @@ const DetailQuiz = () => {
   const stopCapture = () => {
     const shouldStop = window.confirm('Are you sure you want to stop capture? End Submit Quiz Contenst');
       
-    if (!shouldStop) {
+    if (shouldStop) {
   
       return;
    
@@ -309,6 +311,7 @@ const DetailQuiz = () => {
         <div className="right-content">
           <RightCotent
             dataQuiz={dataQuiz}
+            duration = {quiz.duration}
             handleFinishQuiz={handleFinishQuiz}
             setIndex={setIndex}
           />

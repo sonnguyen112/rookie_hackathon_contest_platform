@@ -31,6 +31,7 @@ import com.group10.contestPlatform.exceptions.AppException;
 import com.group10.contestPlatform.repositories.AnswerRepository;
 import com.group10.contestPlatform.repositories.QuestionRepository;
 import com.group10.contestPlatform.repositories.QuizRepository;
+import com.group10.contestPlatform.repositories.TakeRepository;
 import com.group10.contestPlatform.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -45,6 +46,7 @@ public class QuizService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final TakeRepository takeRepository;
     private final AmazonClient amazonClient;
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -68,10 +70,10 @@ public class QuizService {
 
     public List<Quiz> getAllQuizzes() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentPrincipalName = authentication.getName();
-            User testUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
-            List<Quiz> allQuizzes = quizRepository.findAllByHost(testUser);
+            // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            // String currentPrincipalName = authentication.getName();
+            // User testUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
+            List<Quiz> allQuizzes = quizRepository.findAll();
             // System.out.println(allQuizzes);
             return allQuizzes;
         } catch (Exception e) {
@@ -97,6 +99,18 @@ public class QuizService {
 
         if (Objects.nonNull(quizId)) {
             List<Question> questions = questionRepository.findByQuizId(quizId);
+            Quiz quiz = quizRepository.findById(quizId).orElse(null);
+            Long nowTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+
+            if (Objects.isNull(quiz)) {
+                throw new AppException(400, 3);
+            }
+
+            if (nowTimestamp < quiz.getStartAt().getTime() || nowTimestamp > quiz.getEndAt().getTime()) {
+                throw new AppException(400, 14);
+            }
+
+            // Take take = takeRepository.findByQuiz(quiz);
 
             if (!CollectionUtils.isEmpty(questions)) {
                 for (Question question : questions) {
