@@ -43,7 +43,7 @@ const TableUserPaginate = (props) => {
               title=" View Detail"
             >
               <i className="fas fa-edit"></i>
-              View Detail
+              View Cheat Image
             </button>
 
             <button

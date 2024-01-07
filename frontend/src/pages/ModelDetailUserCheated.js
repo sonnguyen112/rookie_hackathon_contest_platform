@@ -85,7 +85,7 @@ const ModelDetailUserCheated = (props) => {
         <Modal.Body>
           <Card>
             <Card.Body>
-              <Card.Title>User Details</Card.Title>
+              <Card.Title>User Cheat Images</Card.Title>
             </Card.Body>
           </Card>
 

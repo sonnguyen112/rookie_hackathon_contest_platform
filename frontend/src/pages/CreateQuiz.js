@@ -54,6 +54,7 @@ const CreateQuiz = (props) => {
     quizCorrect: "",
     startTime: "",
     endTime: "",
+    validTime: "",
   });
   useEffect(() => {
     if (location.state) {
@@ -151,8 +152,17 @@ const CreateQuiz = (props) => {
         copyImgQuiz.search("base64,") + 7
       );
     }
+    else{
+      // Read a image default.png and convert it to base64
+      const defaultImage = await getImageToBase64(
+        "https://static.vecteezy.com/system/resources/previews/018/766/186/non_2x/quiz-guess-social-media-icon-in-flat-style-faq-illustration-on-isolated-background-help-button-sign-business-concept-vector.jpg"
+      )
+      quizCreate.imageQuizUrl = defaultImage.substring(
+        defaultImage.search("base64,") + 7
+      );
+    }
     var checkError = false;
-    var message = { title: "", quizAns: "", quizName: "", quizCorrect: "", startTime: "", endTime: "" };
+    var message = { title: "", quizAns: "", quizName: "", quizCorrect: "", startTime: "", endTime: "", validTime: "" };
 
     if (quizCreate.title.trim() === "") {
       checkError = true;
@@ -165,6 +175,10 @@ const CreateQuiz = (props) => {
     if (endTime === null) {
       checkError = true;
       message.endTime = "Please set the end time of quiz.";
+    }
+    if (endTime < startTime) {
+      checkError = true;
+      message.validTime = "End time must be greater than start time.";
     }
 
     for (let i = 0; i < quizCreate.questions.length; i++) {
@@ -292,6 +306,11 @@ const CreateQuiz = (props) => {
           {messageError.endTime.trim() !== "" && (
             <DialogContentText id="alert-dialog-description">
               Please set the end time of quiz.
+            </DialogContentText>
+          )}
+          {messageError.validTime.trim() !== "" && (
+            <DialogContentText id="alert-dialog-description">
+              {messageError.validTime}
             </DialogContentText>
           )}
         </DialogContent>
