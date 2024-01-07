@@ -3,6 +3,8 @@ package com.group10.contestPlatform.dtos.auth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,6 +17,9 @@ public class SendMailForm {
 
 	@JsonProperty("content")
 	private String content;
+
+		@JsonProperty("imageArray")
+	private List<String> imageArray;
 
 
 
