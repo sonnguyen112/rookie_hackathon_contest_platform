@@ -41,6 +41,7 @@ public class QuizController {
         List<Quiz> quizzes = quizService.getAllQuizzes();
         return ResponseEntity.status(200).body(quizzes.stream().map(quiz -> GetQuizResponse.builder()
                 .id(quiz.getId())
+                .duration(quiz.getEndAt().getTime() - quiz.getStartAt().getTime())
                 .title(quiz.getTitle()).avatar(quiz.getImgURI()).slug(quiz.getSlug()).build()).toList());
     }
 

@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
+  const account = useSelector((state) => state.user.account);
   return (
     <div width="1" className="blask-item">
       <div className="abc">
@@ -14,7 +16,7 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
       <div width="1" className="blask-info">
         <div width="1" className="blask-header">
           <div className="blask-title">{value.title || "One of your quiz"}</div>
-          <div className="blask-utils-btn">
+          {account.role[0] === "ROLE_ADMIN" ? <div className="blask-utils-btn">
             <div>
               <button className="btn" onClick={deleteQuiz}>
                 <i className="fa-solid fa-pencil">Delete</i>
@@ -25,7 +27,8 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
                 <i className="fa-solid fa-ellipsis-vertical">Edit</i>
               </button>
             </div>
-          </div>
+          </div> : null}
+
         </div>
 
         <div className="blask-footer">
@@ -34,7 +37,7 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
             {username || "You"} */}
           </div>
           <div className="blask-edit-info">
-            <div>
+            {account.role[0] === "ROLE_USER" ? <div>
               <button
                 className="blask-start-btn"
                 type="Start"
@@ -43,7 +46,8 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
               >
                 Start
               </button>
-            </div>
+            </div> : null}
+
             {/* <div>
               <button className="blask-assign-btn" type="Assign" value="Assign">
                 Assign

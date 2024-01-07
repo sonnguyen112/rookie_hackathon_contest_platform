@@ -121,7 +121,9 @@ const Library = (props) => {
           deleteQuiz={() => handleDeleteQuiz(index)}
           editQuiz={() => handleEditQuiz(index)}
           onClick={() =>
-            navigate(`/play_quiz/${item.id}`)
+            navigate(`/play_quiz/${item.id}`, {
+              state: { quiz: item },
+            })
           }
         ></BLASKItem>
       ))}

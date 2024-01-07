@@ -16,7 +16,7 @@ const ModelConfirmScreen = (props) => {
   };
 
   const handleBack = () => {
-    navigate("/");
+    navigate("/library");
   };
 
   return (
