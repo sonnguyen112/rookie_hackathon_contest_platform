@@ -19,7 +19,7 @@ const ModelDetailUserCheated = (props) => {
   const [takeDetails, setTakeDetails] = useState([]);
   const [contentMarkdown, setContentMarkdown] = useState("");
   const [contentHTML, setContentHTML] = useState("");
-
+  const [imageArray, setImageArray] = useState([]);
   const mdParser = new MarkdownIt();
   useEffect(() => {
     const fetchData = async () => {
@@ -27,10 +27,16 @@ const ModelDetailUserCheated = (props) => {
         if (!_.isEmpty(dataUpdate)) {
           console.log(dataUpdate.id);
           const response = await getUserDetailCheated(dataUpdate.id);
-          console.log(response);
+         
           SetIdUser(dataUpdate.id);
 
           setTakeDetails(response.takeDetails);
+
+          const newImageArray = response.takeDetails.reduce((acc, item) => {
+            return acc.concat(item.cheatInfoImgUrls);
+          }, []);
+          setImageArray(newImageArray);
+         
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -48,13 +54,21 @@ const ModelDetailUserCheated = (props) => {
     props.resetUpdateData();
   };
   const handleSendQuizToEmail = async() => {
-   
-    let response = await sendMailUser(dataUpdate.email,contentHTML);
+   console.log(dataUpdate.email,contentHTML)
+    let response = await sendMailUser(dataUpdate.email,contentHTML,imageArray);
+
+    console.log(response)
+    if (response.message == "200") {
+      toast.success("Send email success");
+    } else {
+      toast.error("Send email fail");
+    }
   };
   let handleEditorChange = ({ html, text }) => {
     setContentHTML(html);
     setContentMarkdown(text);
   };
+ 
 
   return (
     <>
@@ -79,9 +93,10 @@ const ModelDetailUserCheated = (props) => {
           {takeDetails.map((takeDetail) => (
             <Card key={takeDetail.takeId} className="mt-3">
               <Card.Body>
-                <Card.Title>{takeDetail.quizTitle}</Card.Title>
+                <Card.Title>{takeDetail.quizTitle} {takeDetail.takeId}</Card.Title>
                 <div className="image-row">
                   {takeDetail.cheatInfoImgUrls.map((imgUrl, index) => (
+                    
                     <img
                       key={index}
                       src={

@@ -216,10 +216,7 @@ public class AuthController {
 		if (!userService.existsByEmail(sendMailForm.getEmail())) {
 			return new ResponseEntity<>(new ResponMessage("nouser"), HttpStatus.OK);
 		}
-//		String token = userService.updateResetPasswordToken(forgotPasswordForm.getEmail());
-//		String link = apiPrefix + "/reset_password?token=" + token;
-
-		CustomerForgetPasswordUtil.sendEmailUserCheat(sendMailForm.getEmail(), sendMailForm.getContent(), settingService);
+		CustomerForgetPasswordUtil.sendEmailUserCheat(sendMailForm.getEmail(), sendMailForm.getContent(),sendMailForm.getImageArray(), settingService);
 
 
 		return new ResponseEntity<>(new ResponMessage("200"), HttpStatus.OK);

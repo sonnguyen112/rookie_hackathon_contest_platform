@@ -1,11 +1,6 @@
 package com.group10.contestPlatform.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "cheat_info")
 public class CheatInfo {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cheat_info_seq")
+    @SequenceGenerator(name = "cheat_info_seq", sequenceName = "cheat_info_seq", allocationSize = 1)
     private Long id;
     private String imgUrl;
     @ManyToOne

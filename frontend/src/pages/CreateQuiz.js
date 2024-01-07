@@ -125,7 +125,10 @@ const CreateQuiz = (props) => {
     };
 
     const getImageToBase64 = async (url) => {
+      try {
+        console.log("data123", url);
       const data = await fetch(url);
+  
       const blob = await data.blob();
 
       return new Promise((resolve) => {
@@ -136,8 +139,13 @@ const CreateQuiz = (props) => {
           resolve(base64data);
         };
       });
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
+    }
+  
     const copyImgQuiz = await getImageToBase64(imgQuiz);
+
     if (copyImgQuiz.trim() !== "" && copyImgQuiz.startsWith("data:image")) {
       quizCreate.imageQuizUrl = copyImgQuiz.substring(
         copyImgQuiz.search("base64,") + 7
@@ -297,3 +305,4 @@ const CreateQuiz = (props) => {
 };
 
 export default CreateQuiz;
+

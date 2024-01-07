@@ -30,7 +30,7 @@ public class EmailSettingBag extends SettingBag {
     }
 
     public String getPassword() {
-        System.out.println("MAIL_PASSWORD" + super.getValue("MAIL_PASSWORD"));
+
         return super.getValue("MAIL_PASSWORD");
     }
 
