@@ -251,7 +251,7 @@ function ResponsiveAppBar(props) {
                 />
                 {pages[2]}
               </Button> */}
-                 {isAuthenticated === true &&
+                 {isAuthenticated === true && account.role[0] === "ROLE_ADMIN" &&
                    <Button
                    className="underline-button"
                    component={Link}

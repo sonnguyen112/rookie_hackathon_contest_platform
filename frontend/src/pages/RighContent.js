@@ -3,7 +3,8 @@ import CountDown from "./Content/CountDown";
 
 
 const RightCotent = (props) => {
-    const { dataQuiz } = props;
+    const { dataQuiz, duration } = props;
+    // console.log("Duration", duration)
 
     const refDiv = useRef([])
     const onTimeUp = () => {
@@ -44,6 +45,7 @@ const RightCotent = (props) => {
         <div className="main-timer">
             <CountDown
                 onTimeUp={onTimeUp}
+                duration={duration}
             />
         </div>
         <div className="main-question">

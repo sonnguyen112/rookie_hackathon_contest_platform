@@ -14,4 +14,5 @@ public class GetQuizResponse {
     private String title;
     private String avatar;
     private String slug;
+    private Long duration;
 }

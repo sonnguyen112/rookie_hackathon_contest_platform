@@ -78,6 +78,9 @@ const postForgotPassword = (email) => {
 const sendMailUser = (email,content,imageArray) => {
   return axios.post("api/auth/send_mail_user", { email,content,imageArray });
 };
+const checkCheating = (image) => {
+  return axios.post("api/v1/quiz/check_cheat", {image});
+};
 const postResetPassword = (token,password) => {
   return axios.post(`api/auth/reset_password?token=${token}&password=${password}`, );
 };
@@ -200,4 +203,5 @@ export {
   getOverview,
   getUserDetailCheated,
   sendMailUser,
+  checkCheating,
 };

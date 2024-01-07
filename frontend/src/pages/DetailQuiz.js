@@ -4,7 +4,7 @@ import '../style/DetailQuiz.scss'
 import _ from 'lodash'
 
 
-import { getDataQuiz, postSubmitQuiz } from "../services/apiService";
+import { checkCheating, getDataQuiz, postSubmitQuiz } from "../services/apiService";
 import ModalResult from "./ModalResult";
 import Question from "./Question";
 import RightCotent from "./RighContent";
@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 const DetailQuiz = () => {
   const params = useParams();
   const location = useLocation();
+  const quiz = location.state?.quiz;
+  // console.log("Quizzzz:",quiz.duration);
   const quizId = params.id;;
   const [dataQuiz, setDataQuiz] = useState([]);
   const [index, setIndex] = useState(0)
@@ -32,8 +34,8 @@ const DetailQuiz = () => {
   };
 
  
-  useEffect(() => {
-    const getImage = setInterval(() => {
+  useEffect( ()  => {
+    const getImage = setInterval(async () => {
       //Get base64 of image
       if (stream) {
         const canvas = document.createElement('canvas');
@@ -43,7 +45,10 @@ const DetailQuiz = () => {
         ctx.drawImage(videoRef.current, 0, 0);
         const dataURL = canvas.toDataURL('image/png');
         console.log(dataURL);
-        // call post api with dataURL {"img": dataURL}
+        let res = await checkCheating(dataURL);
+        if(res.is_cheat){
+          toast.warning('You are cheating! Please stop cheating!');
+        }
         
       }
     }, 5000);
@@ -87,7 +92,7 @@ const DetailQuiz = () => {
   const stopCapture = () => {
     const shouldStop = window.confirm('Are you sure you want to stop capture? End Submit Quiz Contenst');
       
-    if (!shouldStop) {
+    if (shouldStop) {
   
       return;
    
@@ -309,6 +314,7 @@ const DetailQuiz = () => {
         <div className="right-content">
           <RightCotent
             dataQuiz={dataQuiz}
+            duration = {quiz.duration}
             handleFinishQuiz={handleFinishQuiz}
             setIndex={setIndex}
           />

@@ -23,10 +23,24 @@ def calculate_color_similarity(imageA, imageB):
     # Return the correlation score
     return d
 
+def calculate_sift_similarity(imageA, imageB):
+    sift = cv2.SIFT_create()
+
+    kp1, des1 = sift.detectAndCompute(imageA, None)
+    kp2, des2 = sift.detectAndCompute(imageB, None)
+    bf = cv2.BFMatcher()
+    matches = bf.knnMatch(des1,des2,k=2)
+    # ratio test as per Lowe's paper
+    good = []
+    for i,(m,n) in enumerate(matches):
+        if m.distance < 0.75*n.distance:
+            good.append(m)
+    return len(good) / len(kp1)
+
 def process_image(image):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    image = cv2.GaussianBlur(image, (3, 3), 0)
-    image = cv2.equalizeHist(image)
+    # image = cv2.GaussianBlur(image, (3, 3), 0)
+    # image = cv2.equalizeHist(image)
     return image
 
 def check_cheat_util(image):
@@ -57,13 +71,16 @@ def check_cheat_util(image):
                     # Dimensions of the icon
                     w, h = icon.shape[::-1]
                     # Calculate the bottom-right corner of the matched area
-                    bottom_right = (top_left[0] + w, top_left[1] + h)
+                    # bottom_right = (top_left[0] + w, top_left[1] + h)
+                    cropped = screenshot[top_left[1]:top_left[1] + h, top_left[0]:top_left[0] + w]
                     cropped_color = screenshot_color[top_left[1]:top_left[1] + h, top_left[0]:top_left[0] + w]
                     cv2.imwrite("result/detect.png", cropped_color)
                     similarity = calculate_color_similarity(cropped_color, icon_color)
+                    sift_similarity = calculate_sift_similarity(cropped, icon)
                     print("Max conf:", max_val)
                     print("Similarity: ", similarity)
-                    if similarity > 0.9 or max_val > 0.9:
+                    print("SIFT Similarity: ", sift_similarity)
+                    if (similarity > 0.9 or max_val > 0.9) and sift_similarity > 0.1:
                         return True, folder
                 except Exception as e:
                     print(e)
