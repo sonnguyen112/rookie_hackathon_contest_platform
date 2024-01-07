@@ -22,13 +22,17 @@ const Question = (props) => {
         {data.image ?
             <div className='q-image'>
                 <img
-                    style={{ cursore: 'pointer' }}
+                    style={{
+                        cursor: 'pointer',
+                        border: '1px solid #ccc',
+                        borderRadius: '5px',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        maxWidth: '100%',
+                        height: 'auto',
+                    }}
                     onClick={() => setIsPreviewImage(true)}
-                    src={`${data.image}`} />
-
-
-                {/* <img src={`data:image/jpeg;base64,${data.image}`} /> */}
-
+                    src={`${data.image}`}
+                />
                 {isPreviewImage === true &&
                     <AddCircleIcon
                         image={`${data.image}`}

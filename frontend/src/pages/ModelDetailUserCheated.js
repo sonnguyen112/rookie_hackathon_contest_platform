@@ -54,7 +54,7 @@ const ModelDetailUserCheated = (props) => {
     props.resetUpdateData();
   };
   const handleSendQuizToEmail = async() => {
-   console.log(dataUpdate.email,contentHTML)
+   
     let response = await sendMailUser(dataUpdate.email,contentHTML,imageArray);
 
     console.log(response)
@@ -96,15 +96,14 @@ const ModelDetailUserCheated = (props) => {
                 <Card.Title>{takeDetail.quizTitle} {takeDetail.takeId}</Card.Title>
                 <div className="image-row">
                   {takeDetail.cheatInfoImgUrls.map((imgUrl, index) => (
-                    
-                    <img
-                      key={index}
-                      src={
-                        "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/416138951_916116136530146_1259414023266758640_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=3635dc&_nc_ohc=I7yQmdMmo6YAX9QjPtE&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfBme18QY8qxDb4ljL96Xr8pVnk_rNXf-djUkAMs6NB2Gg&oe=659C6F94"
-                      }
-                      alt={`cheat image ${index + 1}`}
-                      className="img-thumbnail custom-image"
-                    />
+                    <a href={imgUrl} target="_blank" rel="noopener noreferrer" key={index}>
+                      <img
+                        src={imgUrl}
+                        alt={`cheat image ${index + 1}`}
+                        className="img-thumbnail custom-image"
+                        style={{ width: "300px", height: "auto" }}
+                      />
+                    </a>
                   ))}
                 </div>
                 <Button

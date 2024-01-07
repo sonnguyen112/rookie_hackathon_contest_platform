@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.group10.contestPlatform.dtos.quiz.*;
+import com.group10.contestPlatform.entities.*;
 import com.group10.contestPlatform.utils.CommonUtils;
 import com.group10.contestPlatform.utils.QuizSpecification;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +24,6 @@ import com.group10.contestPlatform.dtos.quiz.CheckCheatResponse;
 import com.group10.contestPlatform.dtos.quiz.CreateAnswerRequest;
 import com.group10.contestPlatform.dtos.quiz.CreateQuestionRequest;
 import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
-import com.group10.contestPlatform.entities.Answer;
-import com.group10.contestPlatform.entities.Question;
-import com.group10.contestPlatform.entities.Quiz;
-import com.group10.contestPlatform.entities.User;
 import com.group10.contestPlatform.exceptions.AppException;
 import com.group10.contestPlatform.repositories.AnswerRepository;
 import com.group10.contestPlatform.repositories.QuestionRepository;
@@ -110,7 +107,14 @@ public class QuizService {
                 throw new AppException(400, 14);
             }
 
-            // Take take = takeRepository.findByQuiz(quiz);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentPrincipalName = authentication.getName();
+            User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
+            Take take = takeRepository.findByUserAndQuiz(curUser, quiz).orElse(null);
+
+            if (take != null) {
+                throw new AppException(400, 15);
+            }
 
             if (!CollectionUtils.isEmpty(questions)) {
                 for (Question question : questions) {
