@@ -16,6 +16,7 @@ import CreateBar from "../components/CreateBar";
 import ContentQuiz from "../components/ContentQuiz";
 import defaultImage from "../assets/images/Grey_thumb.png";
 import { postCreateOrUpdateQuiz } from "../services/apiService";
+import { toast } from "react-toastify";
 
 const CreateQuiz = (props) => {
   const [height, setHeight] = useState(0);
@@ -126,7 +127,6 @@ const CreateQuiz = (props) => {
 
     const getImageToBase64 = async (url) => {
       try {
-        console.log("data123", url);
       const data = await fetch(url);
   
       const blob = await data.blob();
@@ -229,6 +229,10 @@ const CreateQuiz = (props) => {
     //   body: JSON.stringify(quizCreate),
     // });
     let response = await postCreateOrUpdateQuiz(methodS, link, quizCreate);
+    if (response.errCode === 16){
+      toast.warning(response.message);
+      navigate("/library");
+    }
     setLoading(false);
     navigate("/library");
   }

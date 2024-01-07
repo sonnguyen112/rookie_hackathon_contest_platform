@@ -28,6 +28,7 @@ public class ErrorCode {
         dictError.put(13, "Not permission");
         dictError.put(14, "Not is the time for this action");
         dictError.put(15, "You can not do quiz twice");
+        dictError.put(16, "You only update quiz before time start");
 
 
         dictError.put(100, "Something Error");

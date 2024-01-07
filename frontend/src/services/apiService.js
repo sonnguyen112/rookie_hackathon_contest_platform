@@ -6,6 +6,7 @@ const postCreateNewUser = (email, password, username, firstName,lastName, role, 
     username: username,
     password: password,
     firstName: firstName,
+    lastName: lastName,
     password: password,
     role_id: role
   };

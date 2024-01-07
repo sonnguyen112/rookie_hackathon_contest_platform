@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.group10.contestPlatform.dtos.quiz.*;
+import com.group10.contestPlatform.entities.*;
 import com.group10.contestPlatform.utils.CommonUtils;
 import com.group10.contestPlatform.utils.QuizSpecification;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +24,13 @@ import com.group10.contestPlatform.dtos.quiz.CheckCheatResponse;
 import com.group10.contestPlatform.dtos.quiz.CreateAnswerRequest;
 import com.group10.contestPlatform.dtos.quiz.CreateQuestionRequest;
 import com.group10.contestPlatform.dtos.quiz.CreateQuizRequest;
+
 import com.group10.contestPlatform.entities.Answer;
 import com.group10.contestPlatform.entities.Question;
 import com.group10.contestPlatform.entities.Quiz;
+import com.group10.contestPlatform.entities.Take;
 import com.group10.contestPlatform.entities.User;
+
 import com.group10.contestPlatform.exceptions.AppException;
 import com.group10.contestPlatform.repositories.AnswerRepository;
 import com.group10.contestPlatform.repositories.QuestionRepository;
@@ -109,8 +113,19 @@ public class QuizService {
             if (nowTimestamp < quiz.getStartAt().getTime() || nowTimestamp > quiz.getEndAt().getTime()) {
                 throw new AppException(400, 14);
             }
+            
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentPrincipalName = authentication.getName();
+            User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
+            Take take = takeRepository.findByUserAndQuiz(curUser, quiz).orElse(null);
 
-            // Take take = takeRepository.findByQuiz(quiz);
+
+
+
+            if (take != null) {
+                throw new AppException(400, 15);
+            }
+
 
             if (!CollectionUtils.isEmpty(questions)) {
                 for (Question question : questions) {
@@ -143,21 +158,20 @@ public class QuizService {
     }
     @Transactional
     public void updateQuiz(CreateQuizRequest updateQuizRequest, String slug) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentPrincipalName = authentication.getName();
+        Long nowTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
 
-            User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
-            Quiz quiz = quizRepository.findBySlug(slug).orElseThrow(() -> new AppException(400, 3));
-            if (quiz.getHost().getId() != curUser.getId()) {
-                throw new AppException(400, 13);
-            }
-            quizRepository.delete(quiz);
-            createQuizUtil(updateQuizRequest, curUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AppException(400, 100);
+        User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
+        Quiz quiz = quizRepository.findBySlug(slug).orElseThrow(() -> new AppException(400, 3));
+        if (nowTimestamp > quiz.getStartAt().getTime()){
+            throw new AppException(400, 16);
         }
+        if (quiz.getHost().getId() != curUser.getId()) {
+            throw new AppException(400, 13);
+        }
+        quizRepository.delete(quiz);
+        createQuizUtil(updateQuizRequest, curUser);
     }
 
     private void createQuizUtil(CreateQuizRequest createQuizRequest, User curUser) {
@@ -197,19 +211,14 @@ public class QuizService {
 
     @Transactional
     public void deleteQuiz(String slug) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentPrincipalName = authentication.getName();
-            User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
-            Quiz quiz = quizRepository.findBySlug(slug).orElseThrow(() -> new AppException(400, 3));
-            if (quiz.getHost().getId() != curUser.getId()) {
-                throw new AppException(400, 13);
-            }
-            quizRepository.delete(quiz);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AppException(400, 100);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User curUser = userRepository.findByUsername(currentPrincipalName).orElse(null);
+        Quiz quiz = quizRepository.findBySlug(slug).orElseThrow(() -> new AppException(400, 3));
+        if (quiz.getHost().getId() != curUser.getId()) {
+            throw new AppException(400, 13);
         }
+        quizRepository.delete(quiz);
     }
 
     public CheckCheatResponse checkCheat(CheckCheatRequest checkCheatRequest) {

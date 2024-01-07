@@ -37,6 +37,10 @@ const ModelCreateUser = (props) => {
   };
 
   const handleSubmitCreateUser = async () => {
+    if (email === "" || password === "" || username === "" || firstName === "" || lastName === "") {
+      toast.error("Please fill in all fields.");
+      return;
+    }
    
     const isValiEmail = validateEmail(email);
     if (!isValiEmail) {
@@ -55,9 +59,9 @@ const ModelCreateUser = (props) => {
       console.log(data);
       toast.success("success");
       handleClose();
-      props.setCurrentPage(1);
       props.fetchListUsersWithPaginate(1);
     } catch (error) {
+      console.log(error)
       toast.error("Network Error. Please try again later.");
     }
   };

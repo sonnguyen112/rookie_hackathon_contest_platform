@@ -77,7 +77,7 @@ public class SubmitAnswerService implements ISubmitAnswerService {
                 for (String img : imageCheated) {
                     CheatInfo ct = new CheatInfo();
                     ct.setTake(newTake);
-                    ct.setImgUrl(amazonClient.uploadFile(img));
+                    ct.setImgUrl(amazonClient.uploadFile(img.substring(img.indexOf("base64,") + 7)));
                     cheatRepository.save(ct);
                 }
             }
