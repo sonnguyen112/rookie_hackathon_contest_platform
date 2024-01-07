@@ -63,7 +63,7 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
     private List<Take> takes;
 
     private String imgURI;
