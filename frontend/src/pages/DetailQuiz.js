@@ -42,7 +42,7 @@ const DetailQuiz = () => {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(videoRef.current, 0, 0);
         const dataURL = canvas.toDataURL('image/png');
-        // console.log(dataURL);
+        console.log(dataURL);
         // call post api with dataURL {"img": dataURL}
         
       }

@@ -75,8 +75,8 @@ const postLogin = (username, password) => {
 const postForgotPassword = (email) => {
   return axios.post("api/auth/forgot_password", { email });
 };
-const sendMailUser = (email,content) => {
-  return axios.post("api/auth/send_mail_user", { email,content });
+const sendMailUser = (email,content,imageArray) => {
+  return axios.post("api/auth/send_mail_user", { email,content,imageArray });
 };
 const postResetPassword = (token,password) => {
   return axios.post(`api/auth/reset_password?token=${token}&password=${password}`, );
