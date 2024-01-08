@@ -30,7 +30,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { doLogout } from "../redux/action/userAction";
 import { toast } from "react-toastify";
 
-const pages = ["Home", "Library", "Manages User"];
+import HistoryIcon from "@mui/icons-material/History";
+
+const pages = ["Home", "Library", "Manages User", "History"];
 const settings = ["Profile", "Sign out"];
 
 function ResponsiveAppBar(props) {
@@ -270,6 +272,27 @@ function ResponsiveAppBar(props) {
                    {pages[2]}
                  </Button>
                  }
+
+{account.role[0] === "ROLE_USER" && isAuthenticated === true
+                    &&
+                      <Button
+                    className="underline-button"
+                    component={Link}
+                    to="/history"
+                    key={pages[3]}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "flex" }}
+                  >
+                    <HistoryIcon
+                      sx={{
+                        display: { xs: "none", md: "flex" },
+                        mr: 1,
+                        fontSize: "medium",
+                      }}
+                    />
+                    {pages[3]}
+                  </Button>
+                    }
              
               
             </Box>
