@@ -33,7 +33,7 @@ public class TakeAnswer {
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "answerId", nullable = false)
+    @JoinColumn(name = "answerId")
     private Answer answer;
 
     @Builder.Default

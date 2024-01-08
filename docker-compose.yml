@@ -4,7 +4,7 @@ services:
     image: mysql
     restart: always
     command: --default-authentication-plugin=mysql_native_password
-    env_file: ./.env
+    env_file: ./docker.env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -14,6 +14,22 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-  
+  backend:
+    depends_on:
+      - mysql
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file: ./docker.env
+    stdin_open: true
+    tty: true
+    volumes:
+      - .m2:/root/.m2
+  fastapi_server:
+    build: ./cheat_detect_server
+    restart: always
+    ports:
+      - "8000:8000"
 volumes:
   mysql_data:
