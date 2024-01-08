@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import "../App.css";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { getAllQuiz, getOneQuiz, deleteOneQuiz, getAllHistoryByUser } from "../services/apiService";
+import {toast} from 'react-toastify';
 
 const Library = (props) => {
   let navigate = useNavigate();
@@ -29,6 +30,7 @@ const Library = (props) => {
       setLoading(false);
     }
     GetData();
+    
   }, [loading]);
 
   const handleEditQuiz = (index) => {
@@ -46,7 +48,10 @@ const Library = (props) => {
       //   }
       // );
       let editQuiz = await getOneQuiz(quizs[index]["slug"]);
-      
+      if (editQuiz.errCode === 15){
+        toast.warning(editQuiz.message);
+        navigate("/library");
+      }
       console.log("before edit", editQuiz);
       setLoading(false);
       navigate("/create-quiz", {
