@@ -7,6 +7,7 @@ import Library from "./pages/Library";
 import NavPages from "./pages/NavPages";
 import "./App.css";
 import DetailQuiz from "./pages/DetailQuiz";
+import DetailQuizHistory from "./pages/DetailQuizHistory";
 import { Provider, useSelector } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -45,6 +46,7 @@ function App() {
         <Route path="test_create_quiz" element={<CreateQuiz  />} />
         <Route path="test_get_quiz" element = {<Library  />}/>
         <Route path="play_quiz/:id" element={<DetailQuiz  />} />
+        <Route path="history_quiz/:id" element={<DetailQuizHistory  />} />
         
       </Routes>
       <ToastContainer

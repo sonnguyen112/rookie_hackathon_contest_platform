@@ -3,24 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../App.css";
 import { Backdrop, CircularProgress } from "@mui/material";
-import { getAllQuiz, getOneQuiz, deleteOneQuiz } from "../services/apiService";
-import { toast } from "react-toastify";
+import { getAllQuiz, getOneQuiz, deleteOneQuiz, getAllHistoryByUser } from "../services/apiService";
+import {toast} from 'react-toastify';
 
 const Library = (props) => {
   let navigate = useNavigate();
   const [quizs, setQuizs] = useState(Array(0).fill(null));
+  const [quizs_new, setQuizNews] = useState(Array(0).fill(null));
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function GetData() {
       let data = await getAllQuiz();
-   
+      let data_new  = await getAllHistoryByUser();
 
       // let data = await response.json(); // parses JSON response into native JavaScript objects
-      console.log(data);
       setQuizs(data);
+      setQuizNews(data_new);
+
+      quizs.forEach((item, index)=> {
+        let quiz = quizs_new.find((i) => item.id == i.quizId)
+        if(quiz !== undefined){
+          quizs.slice(index, index+1)
+        }
+      })
+
       setLoading(false);
     }
     GetData();
+    
   }, [loading]);
 
   const handleEditQuiz = (index) => {
@@ -42,7 +52,6 @@ const Library = (props) => {
         toast.warning(editQuiz.message);
         navigate("/library");
       }
-      
       console.log("before edit", editQuiz);
       setLoading(false);
       navigate("/create-quiz", {
@@ -118,20 +127,29 @@ const Library = (props) => {
       <Backdrop open={loading} sx={{ zIndex: 100 }}>
         <CircularProgress color="primary" />
       </Backdrop>
-      {quizs.map((item, index) => (
-        <BLASKItem
+      {
+      }
+
+      {quizs.map((item, index) => {
+        let a = quizs_new.find(i => i.quizId === item.id);
+        if(a === undefined) {
+          return (
+            <BLASKItem
+           
+              // avatar={props?.profile.avatar}
+              value={item}
+              deleteQuiz={() => handleDeleteQuiz(index)}
+              editQuiz={() => handleEditQuiz(index)}
+              onClick={() =>
+                navigate(`/play_quiz/${item.id}`, {
+                  state: { quiz: item },
+                })
+              }
+            ></BLASKItem>
+          ) 
+        }
        
-          // avatar={props?.profile.avatar}
-          value={item}
-          deleteQuiz={() => handleDeleteQuiz(index)}
-          editQuiz={() => handleEditQuiz(index)}
-          onClick={() =>
-            navigate(`/play_quiz/${item.id}`, {
-              state: { quiz: item },
-            })
-          }
-        ></BLASKItem>
-      ))}
+      })}
     </div>
   );
 };

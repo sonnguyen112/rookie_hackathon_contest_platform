@@ -6,7 +6,6 @@ const postCreateNewUser = (email, password, username, firstName,lastName, role, 
     username: username,
     password: password,
     firstName: firstName,
-    lastName: lastName,
     password: password,
     role_id: role
   };
@@ -41,6 +40,7 @@ const getQuizByUser = () => {
 const getDataQuiz = (id) => {
   return axios.get(`api/v1/quiz/do-quiz?quizId=${id}`);
 };
+
 const getAllQuizForAdmin = () => {
   return axios.get(`api/v1/quiz/list-quiz`);
 };
@@ -50,6 +50,23 @@ const getAllQuiz = () => {
 const getOneQuiz = (id) => {
   return axios.get(`api/v1/quiz/get_one_quiz/${id}` );
 };
+
+const getAllHistoryByUser = () => {
+  return axios.get(`api/v1/history/get_by_user` );
+};
+const getHistoryByQuiz = (quizId) => {
+  return axios.get(`api/v1/history/get_by_quiz/${quizId}` );
+};
+
+const getDataQuizHistory = (id) => {
+  return axios.get(`api/v1/history/do-quiz_history?quizId=${id}`);
+};
+
+const getQuestionQuizHistory = (id) => {
+  return axios.get(`api/v1/history/get_result_by_quiz/${id}`);
+};
+
+
 
 const deleteQuizForAdmin = (data) => {
   return axios.delete(`api/v1/quiz`, { data: data });
@@ -174,6 +191,8 @@ const getOverview = () => {
 
   return axios.post(`api/v1/overview`);
 };
+
+
 export {
   postCreateNewUser,
   getAllusers,
@@ -205,4 +224,8 @@ export {
   getUserDetailCheated,
   sendMailUser,
   checkCheating,
+  getHistoryByQuiz,
+  getAllHistoryByUser,
+  getQuestionQuizHistory,
+  getDataQuizHistory
 };

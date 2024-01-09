@@ -1,5 +1,6 @@
 package com.group10.contestPlatform.dtos.quiz.usersubmitanswer;
 
+import com.group10.contestPlatform.entities.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,22 @@ public class QuizQuestionQuery {
         this.imgurl = imgurl;
         this.content = content;
         this.score = score;
+    }
+
+        public QuizQuestionQuery(Question question) {
+        this.id = question.getId();
+        this.imgurl = question.getImgURI();
+        this.content = question.getContent();
+        this.score = question.getScore();
+    }
+
+    @Override
+    public String toString() {
+        return "QuizQuestionQuery{" +
+                "id=" + id +
+                ", imgurl='" + imgurl + '\'' +
+                ", content='" + content + '\'' +
+                ", score=" + score +
+                '}';
     }
 }
