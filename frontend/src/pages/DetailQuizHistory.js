@@ -7,6 +7,7 @@ import ModalResult from "./ModalResult";
 import QuestionHistory from "./QuestionHistory";
 import RightCotent from "./RighContent";
 import RightCotentHistory from "./RighContentHistory";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 
 const DetailQuizHistory = () => {
@@ -21,17 +22,23 @@ const DetailQuizHistory = () => {
   const [isShowModalResult, setIsShowModalResult] = useState(true)
   const [isShowAnswer, setIsShowAnswer] = useState(true)
   const [dataModalResult, setDataModalResult] = useState({});
+  const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
   const [showModelConfirm, setShowModelConfirm] = useState(false);
- 
+
 
   useEffect(() => {
-    fetchQuestions();
-    // setShowModelConfirm(true);
-    fetchTake();
+    const getData = async () => {
+      setLoading(true)
+      await fetchQuestions();
+      // setShowModelConfirm(true);
+      await fetchTake();
+      setLoading(false)
+    }
 
-  }, [quizId]);
+    getData();
+  }, []);
 
   const fetchQuestions = async () => {
     let res = await getDataQuizHistory(quizId);
@@ -41,7 +48,7 @@ const DetailQuizHistory = () => {
       .groupBy("id")
       .map((value, key) => {
 
-        
+
         let answers = [];
         let questionDescription, image = null;
         value.forEach((item, index) => {
@@ -54,11 +61,11 @@ const DetailQuizHistory = () => {
           answers = item.answers.map(answer => {
             let select = false;
             let incorr = false;
-            resTake.listAnswerTake.forEach(item=>{
-              if(item.answers.id == answer.id){
+            resTake.listAnswerTake.forEach(item => {
+              if (item.answers.id == answer.id) {
                 select = true;
               }
-              if(item.answers.correct){
+              if (item.answers.correct) {
                 incorr = true
               }
             })
@@ -77,13 +84,13 @@ const DetailQuizHistory = () => {
 
 
   const fetchTake = async () => {
-      let res = await getQuestionQuizHistory(+quizId);
-      let data = _.chain(res)
+    let res = await getQuestionQuizHistory(+quizId);
+    let data = _.chain(res)
       .value()
 
-      setTake(data);
-    }
-  
+    setTake(data);
+  }
+
   const handlePrev = () => {
     if (index - 1 < 0) return;
     setIndex(index - 1)
@@ -92,15 +99,21 @@ const DetailQuizHistory = () => {
     if (dataQuiz.length > index + 1)
       setIndex(index + 1)
 
-      console.log(take)
+    console.log(take)
   }
 
   const handleBack = () => {
     navigate("/history")
-    };
+  };
 
   return (
     <>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="detail-quiz-container">
         <div className="left-content">
           <div className="title">
@@ -139,12 +152,13 @@ const DetailQuizHistory = () => {
           />
         </div>
 
-       
+
       </div>
 
-      
+
     </>
-  )};
-        
+  )
+};
+
 
 export default DetailQuizHistory;

@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 
 import { useEffect } from "react";
 import { postCreateNewUser } from "../services/apiService";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 const ModelCreateUser = (props) => {
   const { show, setShow } = props;
 
@@ -31,12 +33,14 @@ const ModelCreateUser = (props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("2");
+  const [loading, setLoading] = useState(false);
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
 
   const handleSubmitCreateUser = async () => {
+    setLoading(true);
     if (email === "" || password === "" || username === "" || firstName === "" || lastName === "") {
       toast.error("Please fill in all fields.");
       return;
@@ -44,6 +48,7 @@ const ModelCreateUser = (props) => {
    
     const isValiEmail = validateEmail(email);
     if (!isValiEmail) {
+      setLoading(false);
       toast.error("Invalid email");
       return;
     }
@@ -57,6 +62,7 @@ const ModelCreateUser = (props) => {
         role
       );
       console.log(data);
+      setLoading(false);
       toast.success("success");
       handleClose();
       props.fetchListUsersWithPaginate(1);
@@ -68,6 +74,13 @@ const ModelCreateUser = (props) => {
 
   return (
     <>
+      <Backdrop
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Modal
         show={show}
         onHide={handleClose}
@@ -139,7 +152,7 @@ const ModelCreateUser = (props) => {
     </div>
   </form>
 </Modal.Body>
-
+        
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

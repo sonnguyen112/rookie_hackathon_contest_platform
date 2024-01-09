@@ -7,6 +7,8 @@ import TableUserPaginate from "./TableUserPaginate";
 import { toast } from "react-toastify";
 import { getUserWithPaginate } from "../services/apiService";
 import ModelDetailUserCheated from "./ModelDetailUserCheated";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const ManageUser = (props) => {
@@ -23,6 +25,7 @@ const ManageUser = (props) => {
   const [showModelDeleteUser, setShowModelDeleteUser] = useState(false);
   const [dataDelete, setDataDelete] = useState({});
   const [listUsers, setListUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSearchTermChange = (e) => {
     const value = e.target.value;
@@ -64,7 +67,9 @@ const ManageUser = (props) => {
   const fetchListUsersWithPaginate = async (page, searchTerm, role,UserCheated) => {
   
     try {
+      setLoading(true);
       const res = await getUserWithPaginate(page, searchTerm, role,UserCheated);
+      setLoading(false);
     
       if (res) {
         setListUsers(res.listName);
@@ -74,7 +79,7 @@ const ManageUser = (props) => {
       }
     } catch (error) {
       console.error('Error fetching user list:', error);
-    
+      setLoading(false);
     }
   };
 
@@ -89,7 +94,14 @@ const ManageUser = (props) => {
 
 
   return (
+    
     <div className="manage-user-container">
+       <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="users-content">
         <div className="btn-and-search-container">
           <div className="btn-add-new">

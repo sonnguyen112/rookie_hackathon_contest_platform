@@ -1,6 +1,8 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/common/ErrorCode.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/SettingBag.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/controllers/HistoryController.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/SignInForm.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/HistoryService.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/paging/PagingAndSortingParam.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/TakeUserCheatedResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/SignUpForm.java
@@ -49,13 +51,16 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/Quiz.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/GetOneAnswerResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/auth/TakeDetailsDTO.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/TakeAnswerDto.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/Take.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/IRoleService.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/utils/StorageUtils.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/ErrorResponse.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/TakeService.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/repositories/SubmitAnswerRepository.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/HistoryDto.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/services/IUserService.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/usersubmitanswer/ResponseResultTake.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/utils/CommonUtils.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/exceptions/GlobalExceptionHandler.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/GetOneQuizResponse.java
@@ -84,6 +89,7 @@
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/controllers/TestController.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/utils/CustomerRegisterUtil.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/entities/User.java
+/home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/usersubmitanswer/ResponseAnswer.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/repositories/TakeRepository.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/usersubmitanswer/QuizCorrectAnswerQuery.java
 /home/sonnguyen112/Data/rookie_hackathon/src/main/java/com/group10/contestPlatform/dtos/quiz/CreateQuestionRequest.java

@@ -8,9 +8,10 @@ const HistoryPage = (props) => {
     let navigate = useNavigate();
   const [quizs, setQuizs] = useState(Array(0).fill(null));
   const [quiz_new, setQuizs_new] = useState(Array(0).fill(null));
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function GetData() {
+      setLoading(true)
       let data = await getAllQuiz();
       let data_new  = await getAllHistoryByUser();
    
@@ -19,13 +20,16 @@ const HistoryPage = (props) => {
       setLoading(false);
     }
     GetData();
-  }, [loading]);
+  }, []);
 
   
   return (
     <div className="blask-list">
-      <Backdrop open={loading} sx={{ zIndex: 100 }}>
-        <CircularProgress color="primary" />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
       </Backdrop>
 
       {quiz_new.map((item, index) => {
