@@ -19,6 +19,7 @@ import ResetPassword from "./ResetPassword";
 import { useParams } from 'react-router-dom';
 import ManageUser from "./ManageUser";
 import PrivateRoute from "../routes/PrivateRoute";
+import HistoryPage from "./ViewHistory"
 const NavPages = (props) => {
   const [height, setHeight] = React.useState(0);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -62,6 +63,7 @@ const NavPages = (props) => {
 <ManageUser />
         </PrivateRoute>
         } />
+        <Route path="history" element={<HistoryPage token={account.access_token} />} />
 
         <Route path="signup" element={<Signup height={height} />} />
         <Route

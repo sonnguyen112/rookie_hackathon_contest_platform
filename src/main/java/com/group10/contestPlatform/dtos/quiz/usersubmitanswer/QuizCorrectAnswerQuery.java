@@ -1,6 +1,8 @@
 package com.group10.contestPlatform.dtos.quiz.usersubmitanswer;
 
 
+import com.group10.contestPlatform.entities.Answer;
+import com.group10.contestPlatform.entities.Question;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +17,20 @@ public class QuizCorrectAnswerQuery {
         this.id = id;
         this.content = content;
         this.correct = correct;
+    }
+
+    public QuizCorrectAnswerQuery(Answer answer) {
+        this.id = answer.getQuestion().getId();
+        this.content = answer.getContent();
+        this.correct = answer.getCorrect();
+    }
+
+    @Override
+    public String toString() {
+        return "QuizCorrectAnswerQuery{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", correct=" + correct +
+                '}';
     }
 }
