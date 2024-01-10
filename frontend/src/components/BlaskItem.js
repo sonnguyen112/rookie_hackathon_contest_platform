@@ -1,6 +1,20 @@
 import { useSelector } from "react-redux";
+import Chip from '@mui/material/Chip';
 function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
   const account = useSelector((state) => state.user.account);
+  const nowTimeStamp = new Date().getTime();
+  let status = ""
+  console.log(nowTimeStamp, value.startAt, value.endAt)
+  if (nowTimeStamp > value.endAt) {
+    status = "Ended";
+  }
+  else if (nowTimeStamp < value.startAt) {
+    status = "Not started";
+    
+  }
+  else {
+    status = "In progress";
+  }
   return (
     <div width="1" className="blask-item">
       <div className="abc">
@@ -37,6 +51,7 @@ function BLASKItem({ username, value, avatar, onClick, deleteQuiz, editQuiz }) {
             {username || "You"} */}
           </div>
           <div className="blask-edit-info">
+          <Chip label={status} variant="outlined" />
             {account.role[0] === "ROLE_USER" ? <div>
               <button
                 className="blask-start-btn"

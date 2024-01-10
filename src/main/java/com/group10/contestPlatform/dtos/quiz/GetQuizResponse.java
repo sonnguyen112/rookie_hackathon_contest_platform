@@ -15,4 +15,6 @@ public class GetQuizResponse {
     private String avatar;
     private String slug;
     private Long duration;
+    private Long startAt;
+    private Long endAt;
 }

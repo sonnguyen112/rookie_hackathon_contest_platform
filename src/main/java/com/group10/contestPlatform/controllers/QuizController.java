@@ -42,6 +42,8 @@ public class QuizController {
         return ResponseEntity.status(200).body(quizzes.stream().map(quiz -> GetQuizResponse.builder()
                 .id(quiz.getId())
                 .duration(quiz.getEndAt().getTime() - quiz.getStartAt().getTime())
+                .startAt(quiz.getStartAt().getTime())
+                .endAt(quiz.getEndAt().getTime())
                 .title(quiz.getTitle()).avatar(quiz.getImgURI()).slug(quiz.getSlug()).build()).toList());
     }
 
