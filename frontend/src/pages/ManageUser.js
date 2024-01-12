@@ -5,8 +5,9 @@ import ModelUpdateUser from "./ModelUpdateUser";
 import ModelDeleteUser from "./ModelDeleteUser";
 import TableUserPaginate from "./TableUserPaginate";
 import { toast } from "react-toastify";
-import { getUserWithPaginate } from "../services/apiService";
+import { exportCSVUser, exportExcelUser, getUserWithPaginate } from "../services/apiService";
 import ModelDetailUserCheated from "./ModelDetailUserCheated";
+import { useSelector } from "react-redux";
 
 
 const ManageUser = (props) => {
@@ -23,7 +24,7 @@ const ManageUser = (props) => {
   const [showModelDeleteUser, setShowModelDeleteUser] = useState(false);
   const [dataDelete, setDataDelete] = useState({});
   const [listUsers, setListUsers] = useState([]);
-
+  
   const handleSearchTermChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -60,7 +61,7 @@ const ManageUser = (props) => {
   const resetUpdateData = () => {
     setDataUpdate({});
   };
-
+  
   const fetchListUsersWithPaginate = async (page, searchTerm, role,UserCheated) => {
   
     try {
@@ -80,6 +81,7 @@ const ManageUser = (props) => {
 
   useEffect(() => {
     fetchListUsersWithPaginate(currentPage, '', '','');
+   
   }, []);
 
   useEffect(() => {
@@ -87,20 +89,39 @@ const ManageUser = (props) => {
   }, [currentPage, searchTerm, selectedRole,selectedUserCheated]);
 
 
+  const handleExportCSV = async() => {
+    const res = await exportCSVUser();
+ 
+    
+  };
+  const handleExportExcel= async() => {
+    window.location.href = 'http://localhost:8080/api/auth/export/excel';
 
+    
+  };
   return (
     <div className="manage-user-container">
       <div className="users-content">
         <div className="btn-and-search-container">
           <div className="btn-add-new">
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-add-user"
               onClick={() => setShowModelCreateUser(true)}
+              style={{ marginRight: '20px' }}
             >
-              <AddIcon />
               Add new users
             </button>
+        
+            <button
+              className="btn btn-success btn-export-excel"
+              onClick={() => handleExportExcel()}
+              style={{ marginRight: '20px' }}
+            >
+              Export Excel
+            </button>
           </div>
+         
+         
           <div className="search-and-filter-container">
             <input
               type="text"

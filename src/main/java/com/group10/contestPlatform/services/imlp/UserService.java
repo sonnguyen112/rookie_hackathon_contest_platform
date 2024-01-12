@@ -15,6 +15,8 @@ import com.group10.contestPlatform.security.jwt.JWTUtils;
 import com.group10.contestPlatform.services.IUserService;
 import com.group10.contestPlatform.utils.CustomerRegisterUtil;
 import com.group10.contestPlatform.utils.MessageKeys;
+import com.group10.contestPlatform.utils.UserExcelExporter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import paging.PagingAndSortingHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -282,7 +285,13 @@ public class UserService implements IUserService {
 		return userRepository.save(existingUser);
 	}
 
-
+	@Override
+	public List<User>  exportCustomerToExcel(HttpServletResponse response) throws IOException {
+		List<User> customers = userRepository.findAll();
+		UserExcelExporter exportUtils = new UserExcelExporter(customers);
+		exportUtils.exportDataToExcel(response);
+		return customers;
+	}
 
 
 }

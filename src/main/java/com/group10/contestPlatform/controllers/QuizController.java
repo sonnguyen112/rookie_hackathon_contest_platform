@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.group10.contestPlatform.dtos.quiz.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.group10.contestPlatform.dtos.quiz.CheckCheatRequest;
@@ -93,6 +94,7 @@ public class QuizController {
     }
 
     @DeleteMapping("/delete_one_quiz/{slug}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DeleteQuizResponse> deleteQuiz(@PathVariable String slug) {
         quizService.deleteQuiz(slug);
         return ResponseEntity.status(200).body(DeleteQuizResponse.builder().message("Quiz deleted successfully").build());

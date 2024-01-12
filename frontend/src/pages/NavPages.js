@@ -67,6 +67,7 @@ const NavPages = (props) => {
         <Route
           path="login"
           element={
+            
             <Login
               setToken={props.setToken}
               setProfile={props.setProfile}

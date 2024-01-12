@@ -1,6 +1,7 @@
 package com.group10.contestPlatform.security;
 
 
+import com.group10.contestPlatform.entities.Role;
 import com.group10.contestPlatform.entities.RoleEnum;
 import com.group10.contestPlatform.security.jwt.AuthTokenFilter;
 
@@ -19,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
+import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,14 +31,14 @@ public class WebSecurityConfig {
 	private final AuthTokenFilter jwtTokenFilter;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter jwtTokenFilter) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests
-
-								.requestMatchers("/api/**").permitAll()
-
+//								.requestMatchers("/api/**").permitAll()
+//								.requestMatchers("/api/v1/quiz/create_quiz").hasAnyRole("ADMIN")
+								.requestMatchers("/api/v1/quiz/get_all_quiz").hasAnyRole(Role.ADMIN)
 								.anyRequest()
 								.authenticated()
 				)

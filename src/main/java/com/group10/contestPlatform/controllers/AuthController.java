@@ -13,9 +13,7 @@ import com.group10.contestPlatform.services.IRoleService;
 import com.group10.contestPlatform.services.IUserService;
 import com.group10.contestPlatform.services.imlp.ITakeService;
 import com.group10.contestPlatform.services.imlp.SettingService;
-import com.group10.contestPlatform.utils.CustomerForgetPasswordUtil;
-import com.group10.contestPlatform.utils.CustomerRegisterUtil;
-import com.group10.contestPlatform.utils.MessageKeys;
+import com.group10.contestPlatform.utils.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -41,9 +39,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
 import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import jakarta.validation.Valid;
 
@@ -240,6 +240,21 @@ public class AuthController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+
+
+	@GetMapping("/export/excel")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public void exportToExcel(HttpServletResponse response) throws IOException {
+
+		response.setContentType("application/octet-stream");
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=Customers_Information.xlsx";
+		response.setHeader(headerKey, headerValue);
+		userService.exportCustomerToExcel(response);
+
+
 	}
 
 

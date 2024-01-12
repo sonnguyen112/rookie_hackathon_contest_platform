@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import PrivateRoute from "./routes/PrivateRoute";
 function App() {
   const emptyProfile = {
     username: "",
@@ -40,7 +41,12 @@ function App() {
         />
         <Route
           path="create-quiz"
-          element={<CreateQuiz />}
+          element={
+        
+          <PrivateRoute>
+<CreateQuiz />
+        </PrivateRoute>
+        }
         />
         <Route path="test_create_quiz" element={<CreateQuiz  />} />
         <Route path="test_get_quiz" element = {<Library  />}/>

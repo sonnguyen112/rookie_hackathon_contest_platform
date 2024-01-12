@@ -16,6 +16,36 @@ const postCreateNewUser = (email, password, username, firstName,lastName, role, 
 const getAllusers = () => {
   return axios.get("api/auth/user");
 };
+
+const exportCSVUser = () => {
+  return axios.get("api/auth/export/csv");
+};
+const exportExcelUser = async () => {
+  try {
+    const response = await axios.get("api/auth/export/excel", {
+      responseType: 'arraybuffer', // Chỉ định kiểu dữ liệu trả về là mảng byte (array buffer)
+    });
+
+    // Tạo một Blob từ dữ liệu nhận được
+    const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Tạo một URL cho Blob và tạo thẻ <a> để tải xuống
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'filename.xlsx'); // Đặt tên cho file tải về
+
+    // Thêm thẻ <a> vào DOM và kích hoạt sự kiện click để tự động tải xuống
+    document.body.appendChild(link);
+    link.click();
+
+    // Xóa thẻ <a> sau khi tải xuống hoàn tất
+    document.body.removeChild(link);
+
+  } catch (error) {
+    console.error('Error exporting Excel:', error);
+  }
+};
 const getUserWithPaginate = (page, searchTerm, selectedRole,UserCheated) => {
 
   let apiUrl = `api/auth/users/page/${page}?sortField=firstName&sortDir=asc`;
@@ -31,7 +61,7 @@ const getUserWithPaginate = (page, searchTerm, selectedRole,UserCheated) => {
   if (UserCheated) {
     apiUrl += `&userCheated=${UserCheated}`;
   }
-  console.log(apiUrl)
+
 
   return axios.get(apiUrl);
 };
@@ -176,6 +206,8 @@ const getOverview = () => {
 };
 export {
   postCreateNewUser,
+  exportExcelUser,
+  exportCSVUser,
   getAllusers,
   putUpdateUser,
   deleteUser,

@@ -5,9 +5,11 @@ import com.group10.contestPlatform.dtos.auth.TakeUserCheatedResponse;
 import com.group10.contestPlatform.dtos.auth.UserResponse;
 import com.group10.contestPlatform.entities.User;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Pageable;
 import paging.PagingAndSortingHelper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +39,5 @@ public interface IUserService {
 	User updateUser(Long id, ChangeProfileForm changeProfileForm) throws Exception;
 
 
+	List<User> exportCustomerToExcel(HttpServletResponse response) throws IOException;
 }
